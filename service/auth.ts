@@ -93,7 +93,7 @@ const auth = {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ refreshToken }),
+        body: JSON.stringify({ refreshToken: refreshToken }),
       });
 
       const data: AuthResponse = await response.json();
