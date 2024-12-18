@@ -21,6 +21,7 @@ export default function Profile() {
                             await auth.logout();
                             router.replace('/(auth)/login');
                         } catch (error) {
+                            console.log(error);
                             Alert.alert('오류', '로그아웃 중 문제가 발생했습니다.');
                         }
                     }

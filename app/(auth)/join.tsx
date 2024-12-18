@@ -13,19 +13,29 @@ export default function Join() {
   const handleJoin = async () => {
     try {
       // 입력값 검증
-      if (!id || !password) {
-        setError('아이디와 비밀번호를 모두 입력해주세요.');
+      if (!id) {
+        setError('아이디를 입력하세요.');
         return;
-      }
+    }
+    if (!password) {
+        setError('비밀번호를 입력하세요.');
+        return;
+    }
+    if (!userName) {
+      setError('닉네임을 입력하세요.');
+      return;
+  }
       const response = await auth.join(id, password, userName);
       if (response.success) {
         // 회원가입 성공
         router.replace('/login'); // 로그인 페이지로 이동
       } else {
-        setError(response.message || '회원가입에 실패했습니다.');
+        console.error(response.message);
+        setError(response.message);
       }
-    } catch (error) {
-      setError('회원가입 중 오류가 발생했습니다.');
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message);
     }
   };
 

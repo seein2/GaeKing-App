@@ -1,9 +1,11 @@
 import { Text, View, StyleSheet } from "react-native";
+import { useUser } from "@/context/userContext";
 
 export default function Index() {
+  const { user } = useUser();
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>메인화면</Text>
+      <Text style={styles.text}>반갑습니다! {user?.user_name}</Text>
     </View>
   );
 }

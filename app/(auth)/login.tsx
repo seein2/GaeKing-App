@@ -3,8 +3,10 @@ import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'rea
 import { router, Link } from 'expo-router';
 import AuthInput from '@/components/AuthInput';
 import auth from '@/service/auth';
+import { useUser } from '@/context/userContext';
 
 export default function Login() {
+    const { setUser } = useUser();
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -12,21 +14,28 @@ export default function Login() {
 
     const handleLogin = async () => {
         try {
-            if (!id || !password) {
-                setError('아이디와 비밀번호를 모두 입력해주세요.');
+            if (!id) {
+                setError('아이디를 입력하세요.');
+                return;
+            }
+            if (!password) {
+                setError('비밀번호를 입력하세요.');
                 return;
             }
 
             setIsLoading(true);
             const response = await auth.login(id, password);
-            if (response.success) {
-                router.replace('/(tabs)');
+            if (response.success && response.user) {
+                setUser(response.user);
+                router.replace('/');
             } else {
+                console.error(response.message);
+                
                 setError(response.message);
             }
-        } catch (error) {
-            console.error(error);
-            setError('로그인 중 오류가 발생했습니다.');
+        } catch (err) {
+            const error = err as Error;
+            setError(error.message);
         } finally {
             setIsLoading(false);
         }

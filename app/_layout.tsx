@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import { Slot, useRouter } from 'expo-router';
 import { useFonts } from 'expo-font';
-import auth from '@/service/auth';
+import { View } from 'react-native';
+import { UserProvider, useUser } from '@/context/userContext';
+import { tokenStorage } from '@/service/tokenStorage';
 
-export default function RootLayout() {
+function AuthenticatedLayout() {
   const router = useRouter();
-  const [loaded] = useFonts({
-  });
+
 
   useEffect(() => {
     checkAuth();
@@ -14,19 +15,38 @@ export default function RootLayout() {
 
   const checkAuth = async () => {
     try {
-      const token = await auth.getAccessToken();
+      const token = await tokenStorage.getAccessToken();
       if (!token) {
-        // 토큰이 없으면 /login 페이지로
         router.replace('/login');
-      } else {
-        // 토큰이 있으면 메인 페이지로
-        router.replace('/');
+        return;
       }
+
+      // 토큰이 있으면 사용자 정보도 가져옴
+      // const userData = await auth.getUserInfo();
+      // setUser(userData); // context에 사용자 정보 설정
+
+      router.replace('/');
     } catch (error) {
-      router.replace('/login'); 
+      console.error(error);
+      router.replace('/login');
     }
   };
 
+  return (
+    <View style={{ flex: 1 }}>
+      <Slot />
+    </View>
+  );
+}
+
+export default function RootLayout() {
+  const [loaded] = useFonts({});
+
   if (!loaded) return null;
-  return <Slot />; // router에 지정된 페이지 렌더링
+
+  return (
+    <UserProvider>
+      <AuthenticatedLayout />
+    </UserProvider>
+  );
 }
