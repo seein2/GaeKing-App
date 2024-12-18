@@ -1,36 +1,63 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Slot, useRouter } from 'expo-router';
 import { useFonts } from 'expo-font';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { UserProvider, useUser } from '@/context/userContext';
 import { tokenStorage } from '@/service/tokenStorage';
+import auth from '@/service/auth';
 
 function AuthenticatedLayout() {
   const router = useRouter();
-
+  const { setUser } = useUser();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    checkAuth();
+    const initAuth = async () => {
+      try {
+        const token = await tokenStorage.getAccessToken();
+        if (!token) {
+          // 즉시 리다이렉트하지 않고 상태를 업데이트
+          setIsLoading(false);
+          return;
+        }
+
+        const userData = await auth.initializeAuth();
+        if (userData) {
+          setUser(userData);
+        }
+      } catch (error) {
+        console.error('사용자 인증 실패:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    initAuth();
   }, []);
 
-  const checkAuth = async () => {
-    try {
-      const token = await tokenStorage.getAccessToken();
-      if (!token) {
-        router.replace('/login');
-        return;
-      }
+  useEffect(() => {
+    // 로딩이 완료된 후에 네비게이션 수행
+    if (!isLoading) {
+      const navigateBasedOnAuth = async () => {
+        const token = await tokenStorage.getAccessToken();
+        if (!token) {
+          router.replace('/login');
+        } else {
+          router.replace('/');
+        }
+      };
 
-      // 토큰이 있으면 사용자 정보도 가져옴
-      // const userData = await auth.getUserInfo();
-      // setUser(userData); // context에 사용자 정보 설정
-
-      router.replace('/');
-    } catch (error) {
-      console.error(error);
-      router.replace('/login');
+      navigateBasedOnAuth();
     }
-  };
+  }, [isLoading, router]);
+
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>로딩 중...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={{ flex: 1 }}>
