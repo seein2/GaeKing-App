@@ -14,6 +14,7 @@ export default function AuthInput({ value, onChangeText, placeholder, secureText
             value={value}
             onChangeText={onChangeText}
             placeholder={placeholder}
+            placeholderTextColor="#999"
             secureTextEntry={secureTextEntry}
         />
     );
