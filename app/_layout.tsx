@@ -10,46 +10,48 @@ function AuthenticatedLayout() {
   const router = useRouter();
   const { setUser } = useUser();
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const initAuth = async () => {
       try {
         const token = await tokenStorage.getAccessToken();
+
         if (!token) {
-          // 즉시 리다이렉트하지 않고 상태를 업데이트
           setIsLoading(false);
+          setIsAuthenticated(false);
           return;
         }
 
         const userData = await auth.initializeAuth();
         if (userData) {
           setUser(userData);
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
         }
       } catch (error) {
-        console.error('사용자 인증 실패:', error);
+        setIsAuthenticated(false);
       } finally {
         setIsLoading(false);
       }
     };
 
     initAuth();
-  }, []);
+  }, [setUser]);
 
   useEffect(() => {
     // 로딩이 완료된 후에 네비게이션 수행
     if (!isLoading) {
-      const navigateBasedOnAuth = async () => {
-        const token = await tokenStorage.getAccessToken();
-        if (!token) {
-          router.replace('/login');
-        } else {
-          router.replace('/');
-        }
-      };
+      if (isAuthenticated) {
+        router.replace('/');
+      } else {
+        console.log(isAuthenticated);
 
-      navigateBasedOnAuth();
+        router.replace('/login');
+      }
     }
-  }, [isLoading, router]);
+  }, [isLoading, isAuthenticated, router]);
 
   if (isLoading) {
     return (
