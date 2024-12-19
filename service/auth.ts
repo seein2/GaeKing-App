@@ -10,14 +10,14 @@ interface AuthResponse {
 }
 
 interface User {
-  id: string;
+  user_id: string;
   user_name: string;
 }
 
 const auth = {
-  join: async (id: string, password: string, user_name: string): Promise<AuthResponse> => {
+  join: async (user_id: string, password: string, user_name: string): Promise<AuthResponse> => {
     try {
-      const response = await api.post('/auth/join', { id, password, user_name });
+      const response = await api.post('/auth/join', { user_id, password, user_name });
       const data: AuthResponse = response.data;
 
       if (!data.success) {
@@ -34,9 +34,9 @@ const auth = {
     }
   },
 
-  login: async (id: string, password: string): Promise<AuthResponse> => {
+  login: async (user_id: string, password: string): Promise<AuthResponse> => {
     try {
-      const response = await api.post('/auth/login', { id, password });
+      const response = await api.post('/auth/login', { user_id, password });
       const data: AuthResponse = response.data;
 
       if (!data.success) {
@@ -50,6 +50,23 @@ const auth = {
       return data;
     } catch (error) {
       throw error;
+    }
+  },
+
+  // 자동로그인
+  initializeAuth: async (): Promise<User | null> => {
+    try {
+      const token = await tokenStorage.getAccessToken();
+      console.log("유저의 엑세스토큰: ", token);
+
+      if (!token) return null;
+
+      const response = await api.get('/auth/info');
+      console.log('유저 정보 응답:', response.data);
+      return response.data.user;
+    } catch (error) {
+      await tokenStorage.removeTokens();
+      return null;
     }
   },
 
