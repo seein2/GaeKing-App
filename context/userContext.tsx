@@ -1,7 +1,10 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import { useRouter } from 'expo-router';
+import auth from '@/service/auth';
 
+// userContext.tsx
 interface User {
-    id: string;
+    user_id: string;
     user_name: string;
 }
 
@@ -10,7 +13,6 @@ interface UserContextType {
     setUser: (user: User | null) => void;
 }
 
-// Context 생성 시 타입 명시적 지정 및 초기값 설정
 const UserContext = createContext<UserContextType | null>(null);
 
 export function UserProvider({ children }: { children: React.ReactNode }) {
