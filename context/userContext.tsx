@@ -1,8 +1,5 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { useRouter } from 'expo-router';
-import auth from '@/service/auth';
+import { createContext, useContext, useState } from 'react';
 
-// userContext.tsx
 interface User {
     user_id: string;
     user_name: string;

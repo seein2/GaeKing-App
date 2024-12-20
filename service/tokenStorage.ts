@@ -6,9 +6,7 @@ export const TOKEN_STORAGE_KEY = {
 };
 
 export const tokenStorage = {
-  getAccessToken: async () => {
-    console.log("엑세스토킄ㄴ",await AsyncStorage.getItem(TOKEN_STORAGE_KEY.ACCESS_TOKEN));
-    
+  getAccessToken: async () => {    
     return await AsyncStorage.getItem(TOKEN_STORAGE_KEY.ACCESS_TOKEN);
   },
 
