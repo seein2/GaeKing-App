@@ -26,14 +26,12 @@ function AuthenticatedLayout() {
         const userData = await auth.initializeAuth();
         if (userData) {
           setUser(userData);
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
+          setIsAuthenticated(true); // 로그인
         }
       } catch (error) {
         setIsAuthenticated(false);
       } finally {
-        setIsLoading(false);
+        setIsLoading(false); // 로딩은 무조건 끝냄
       }
     };
 
@@ -41,13 +39,12 @@ function AuthenticatedLayout() {
   }, [setUser]);
 
   useEffect(() => {
-    // 로딩이 완료된 후에 네비게이션 수행
+    // 로딩이 끝났을 때
     if (!isLoading) {
-      if (isAuthenticated) {
+      if (isAuthenticated) { // 로그인 상태면
         router.replace('/');
       } else {
         console.log(isAuthenticated);
-
         router.replace('/login');
       }
     }
