@@ -1,10 +1,5 @@
 import { createContext, useContext, useState } from 'react';
 
-interface User {
-    user_id: string;
-    user_name: string;
-}
-
 interface UserContextType {
     user: User | null;
     setUser: (user: User | null) => void;
@@ -25,7 +20,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
 export function useUser() {
     const context = useContext(UserContext);
     if (context === null) {
-        throw new Error('useUser must be used within a UserProvider');
+        throw new Error('useUser는 UserProvider안에서 사용되어야 합니다.');
     }
     return context;
 }
