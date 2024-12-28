@@ -21,7 +21,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="dogs/index"  // 강아지관리 화면 (dogs/index.tsx)
+        name="dogs/index"
         options={{
           title: '강아지관리',
           tabBarIcon: ({ color, size }) => (
@@ -31,7 +31,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="sns/index"  // SNS 화면 (sns/index.tsx)
+        name="sns/index"
         options={{
           title: 'SNS',
           tabBarIcon: ({ color, size }) => (
@@ -41,7 +41,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="profile/index"  // 프로필 화면 (profile/index.tsx)
+        name="profile/index"
         options={{
           title: '프로필',
           tabBarIcon: ({ color, size }) => (
