@@ -23,43 +23,51 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-
-    if (error.response?.data?.message) {
-      return Promise.reject(new Error(error.response.data.message));
+    // error.config가 undefined인 경우 처리
+    if (!error.config) {
+      console.log('⚠️ error.config is undefined');
+      return Promise.reject(error);
     }
 
+    // 기존 요청 정보가 없는 경우 새로 생성
     const originalRequest = error.config;
-    originalRequest._retry = originalRequest._retry || false;
+    if (originalRequest._retry === undefined) {
+      originalRequest._retry = false;
+    }
 
+    // 이후 리프레시 토큰 갱신 로직
     if (error.response?.status === 401 && !originalRequest._retry && originalRequest.url !== '/auth/login') {
       originalRequest._retry = true;
 
       try {
         const refreshToken = await tokenStorage.getRefreshToken();
         if (!refreshToken) {
-          throw new Error('리프레쉬토큰이 없음');
+          throw new Error('리프레쉬토큰이 없음'); 
         }
 
         const response = await api.post('/auth/refresh', { refreshToken });
         const { accessToken } = response.data;
 
         if (accessToken) {
-          console.log('새 액세스 토큰 발급 성공');
           await tokenStorage.setTokens(accessToken, refreshToken);
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
           return api(originalRequest);
         } else {
-          console.log('새 액세스 토큰 발급 실패');
           throw new Error('새 액세스 토큰 발급 실패');
         }
       } catch (refreshError) {
-        console.error('토큰 갱신 실패:', refreshError);
+        console.error('Token refresh failed:', refreshError);
         await tokenStorage.removeTokens();
         throw refreshError;
       }
     }
 
-    return Promise.reject(error);
+    // 그 외의 경우는 원래 에러 반환
+    return Promise.reject(
+      error.response?.data?.message 
+        ? new Error(error.response.data.message) 
+        : error
+    );
   }
 );
 

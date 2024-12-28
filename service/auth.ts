@@ -9,11 +9,6 @@ interface AuthResponse {
   user?: User;
 }
 
-interface User {
-  user_id: string;
-  user_name: string;
-}
-
 const auth = {
   join: async (user_id: string, password: string, user_name: string): Promise<AuthResponse> => {
     try {
@@ -56,13 +51,13 @@ const auth = {
   // 자동로그인
   initializeAuth: async (): Promise<User | null> => {
     try {
-      const token = await tokenStorage.getAccessToken();
-      console.log("유저의 엑세스토큰: ", token);
+      const accessToken = await tokenStorage.getAccessToken();
+      const refreshToken = await tokenStorage.getRefreshToken();
 
-      if (!token) return null;
+      if (!accessToken || !refreshToken) return null;
 
       const response = await api.get('/auth/info');
-      console.log('유저 정보 응답:', response.data);
+      console.log('유저 정보:', response.data);
       return response.data.user;
     } catch (error) {
       await tokenStorage.removeTokens();
