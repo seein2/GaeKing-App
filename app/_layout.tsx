@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Slot, useRouter } from 'expo-router';
+import { Stack, useRouter } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { View, Text } from 'react-native';
 import { UserProvider, useUser } from '@/context/userContext';
 import { tokenStorage } from '@/service/tokenStorage';
 import auth from '@/service/auth';
+import { DogProvider } from '@/context/dogContext';
 
 function AuthenticatedLayout() {
   const router = useRouter();
@@ -15,18 +16,13 @@ function AuthenticatedLayout() {
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const token = await tokenStorage.getAccessToken();
-
-        if (!token) {
-          setIsLoading(false);
-          setIsAuthenticated(false);
-          return;
-        }
-
+        // 초기 유저 정보 조회 시도
         const userData = await auth.initializeAuth();
         if (userData) {
           setUser(userData);
-          setIsAuthenticated(true); // 로그인
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
         }
       } catch (error) {
         setIsAuthenticated(false);
@@ -44,7 +40,6 @@ function AuthenticatedLayout() {
       if (isAuthenticated) { // 로그인 상태면
         router.replace('/');
       } else {
-        console.log(isAuthenticated);
         router.replace('/login');
       }
     }
@@ -59,9 +54,11 @@ function AuthenticatedLayout() {
   }
 
   return (
-    <View style={{ flex: 1 }}>
-      <Slot />
-    </View>
+    <Stack screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="(auth)" />
+      <Stack.Screen name="(tabs)" />
+      <Stack.Screen name="dogs" />
+    </Stack>
   );
 }
 
@@ -72,7 +69,9 @@ export default function RootLayout() {
 
   return (
     <UserProvider>
-      <AuthenticatedLayout />
+      <DogProvider>
+        <AuthenticatedLayout />
+      </DogProvider>
     </UserProvider>
   );
 }
