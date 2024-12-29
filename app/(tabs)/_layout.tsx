@@ -15,15 +15,15 @@ export default function TabLayout() {
         options={{
           title: '홈',
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="home-outline" size={size} color={color} />
+            <Ionicons name="paw-outline" size={size} color={color} />
           ),
         }}
       />
 
       <Tabs.Screen
-        name="dogs/index"
+        name="schedules/index"
         options={{
-          title: '강아지관리',
+          title: '스케쥴관리',
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="paw-outline" size={size} color={color} />
           ),
