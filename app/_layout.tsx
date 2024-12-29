@@ -3,7 +3,6 @@ import { Stack, useRouter } from 'expo-router';
 import { useFonts } from 'expo-font';
 import { View, Text } from 'react-native';
 import { UserProvider, useUser } from '@/context/userContext';
-import { tokenStorage } from '@/service/tokenStorage';
 import auth from '@/service/auth';
 import { DogProvider } from '@/context/dogContext';
 
@@ -57,7 +56,7 @@ function AuthenticatedLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(auth)" />
       <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="dogs" />
+      <Stack.Screen name="schedules" />
     </Stack>
   );
 }
