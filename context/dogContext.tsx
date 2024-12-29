@@ -22,7 +22,7 @@ export function DogProvider({ children }: { children: React.ReactNode }) {
                     setDog(JSON.parse(savedDog));
                 }
             } catch (error) {
-                console.error('Error loading dog data:', error);
+                console.error('강아지 로딩 실패:', error);
             }
         };
         loadDog();
@@ -38,7 +38,7 @@ export function DogProvider({ children }: { children: React.ReactNode }) {
             }
             setDog(newDog);
         } catch (error) {
-            console.error('Error saving dog data:', error);
+            console.error('강아지 저장 오류:', error);
         }
     };
 
