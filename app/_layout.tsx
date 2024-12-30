@@ -5,6 +5,7 @@ import { View, Text } from 'react-native';
 import { UserProvider, useUser } from '@/context/userContext';
 import auth from '@/service/auth';
 import { DogProvider } from '@/context/dogContext';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 function AuthenticatedLayout() {
   const router = useRouter();
@@ -56,7 +57,7 @@ function AuthenticatedLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(auth)" />
       <Stack.Screen name="(tabs)" />
-      <Stack.Screen name="schedules" />
+      <Stack.Screen name="dogs" />
     </Stack>
   );
 }
@@ -69,7 +70,9 @@ export default function RootLayout() {
   return (
     <UserProvider>
       <DogProvider>
-        <AuthenticatedLayout />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <AuthenticatedLayout />
+        </GestureHandlerRootView>
       </DogProvider>
     </UserProvider>
   );
