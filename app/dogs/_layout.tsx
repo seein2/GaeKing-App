@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 
-export default function DogsLayout() {
+export default function Index() {
   return (
     <Stack
       screenOptions={{
