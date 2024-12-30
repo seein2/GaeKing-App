@@ -51,6 +51,7 @@ const dog = {
         }
     },
 
+    // 프로필 사진 가져오기
     getProfileImageUrl: (imagePath: string | null) => {
         if (!imagePath) return null;
         return `${api.defaults.baseURL}/${imagePath}`;
@@ -108,6 +109,15 @@ const dog = {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    delete: async (dogId: number): Promise<DogResponse> => {
+        try {
+            const response = await api.delete(`/dogs/${dogId}`);
             return response.data;
         } catch (error) {
             throw error;
