@@ -53,7 +53,7 @@ export default function RegisterDog() {
       await setDog(result.result ?? null);
 
       Alert.alert('성공', '강아지가 등록되었습니다.', [
-        { text: '확인', onPress: () => router.replace('/(tabs)/dogs') }
+        { text: '확인', onPress: () => router.replace('/(tabs)') }
       ]);
     } catch (error) {
       Alert.alert('오류', '강아지 등록에 실패했습니다.');
@@ -63,13 +63,6 @@ export default function RegisterDog() {
 
   return (
     <>
-      <Stack.Screen
-        options={{
-          headerTitle: "강아지 등록",
-          headerShown: true,
-          presentation: 'card',
-        }}
-      />
       <View style={styles.container}>
         {/* 프로필 사진 섹션을 맨 위로 이동 */}
         <View style={styles.profileSection}>
@@ -92,10 +85,11 @@ export default function RegisterDog() {
             accessibilityHint="강아지의 이름을 입력하세요"
           />
 
+          <Text style={styles.label}>강아지 품종</Text>
           <TextInput
             value={breedType}
             onChangeText={setBreedType}
-            placeholder="품종"
+            placeholder="ex) 말티푸"
             style={styles.input}
           />
 
