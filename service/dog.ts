@@ -50,7 +50,7 @@ const dog = {
             throw error;
         }
     },
-    
+
     getProfileImageUrl: (imagePath: string | null) => {
         if (!imagePath) return null;
         return `${api.defaults.baseURL}/${imagePath}`;
@@ -58,7 +58,7 @@ const dog = {
 
     info: async (): Promise<DogResponse> => {
         try {
-            const response = await api.get('/dog');
+            const response = await api.get('/dog/${dogId}');
             return response.data
         } catch (error) {
             throw error;
