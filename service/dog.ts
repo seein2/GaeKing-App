@@ -56,10 +56,59 @@ const dog = {
         return `${api.defaults.baseURL}/${imagePath}`;
     },
 
-    info: async (): Promise<DogResponse> => {
+    info: async (dog_id: number): Promise<DogResponse> => {
         try {
-            const response = await api.get('/dog/${dogId}');
-            return response.data
+            const response = await api.get(`/dog/${dog_id}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    list: async (): Promise<DogResponse> => {
+        try {
+            const response = await api.get(`/dog`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    update: async (
+        dog_id: number,
+        updateData: {
+            dog_name?: string;
+            birth_date?: Date;
+            breed_type?: string;
+            gender?: "남자" | "여자";
+            profile_image?: ImagePickerAsset;
+        }
+    ): Promise<DogResponse> => {
+        try {
+            // FormData 객체 생성
+            const formData = new FormData();
+            if (updateData.dog_name) formData.append('dog_name', updateData.dog_name);
+            if (updateData.birth_date) formData.append('birth_date', updateData.birth_date.toISOString());
+            if (updateData.breed_type) formData.append('breed_type', updateData.breed_type);
+            if (updateData.gender) formData.append('gender', updateData.gender);
+
+            if (updateData.profile_image) {
+                const imageUri = updateData.profile_image.uri;
+                const fileName = imageUri.split('/').pop() || 'photo.jpg';
+
+                formData.append('profile_image', {
+                    uri: imageUri,
+                    name: fileName,
+                    type: updateData.profile_image.mimeType || 'image/jpeg',
+                } as any);
+            }
+
+            const response = await api.put(`/dog/${dog_id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            return response.data;
         } catch (error) {
             throw error;
         }
