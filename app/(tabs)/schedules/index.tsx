@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import BottomSheet from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { AntDesign } from '@expo/vector-icons';
 
 interface Schedule {
@@ -20,9 +20,10 @@ interface MarkedDates {
 
 export default function ScheduleScreen() {
   const [selectedDate, setSelectedDate] = useState('');
-  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [bottomSheetIndex, setBottomSheetIndex] = useState(0);
+  const bottomSheetRef = useRef<BottomSheet>(null); // BottomSheet ref 추가
   const [markedDates, setMarkedDates] = useState<MarkedDates>({
-    '2024-01-01': {
+    '2024-12-30': {
       dots: [
         { key: 'dog1', color: '#FF9999' },
         { key: 'dog2', color: '#99FF99' },
@@ -50,14 +51,18 @@ export default function ScheduleScreen() {
 
     setMarkedDates(updatedMarkedDates);
     setSelectedDate(day.dateString);
-    setIsBottomSheetOpen(true);
+    setBottomSheetIndex(0);
   }, [selectedDate, markedDates]);
+
+  const handleCloseBottomSheet = useCallback(() => {
+    setBottomSheetIndex(-1);
+  }, []);
 
   const { height } = Dimensions.get('window');
 
   return (
     <View style={styles.container}>
-      <View style={[styles.calendarContainer, { height: height * 0.65 }]}>
+      <View style={[styles.calendarContainer, { height: height * 0.9 }]}>
         <Calendar
           style={styles.calendar}
           markingType={'multi-dot'}
@@ -87,13 +92,14 @@ export default function ScheduleScreen() {
       </View>
 
       <BottomSheet
-        index={isBottomSheetOpen ? 0 : -1}
+        ref={bottomSheetRef}
+        index={bottomSheetIndex}
         snapPoints={['25%', '50%', '75%']}
-        onChange={(index) => setIsBottomSheetOpen(index >= 0)}
+        onChange={setBottomSheetIndex}
         enablePanDownToClose={true}
         style={styles.bottomSheet}
       >
-        <View style={styles.bottomSheetContent}>
+        <BottomSheetView style={styles.bottomSheetContent}>
           <View style={styles.bottomSheetHeader}>
             <Text style={styles.dateTitle}>
               {selectedDate ? new Date(selectedDate).toLocaleDateString('ko-KR', {
@@ -102,9 +108,9 @@ export default function ScheduleScreen() {
                 day: 'numeric'
               }) : ''}
             </Text>
-            <TouchableOpacity 
+            <TouchableOpacity
               style={styles.closeButton}
-              onPress={() => setIsBottomSheetOpen(false)}
+              onPress={handleCloseBottomSheet}
             >
               <AntDesign name="close" size={24} color="#666" />
             </TouchableOpacity>
@@ -124,7 +130,7 @@ export default function ScheduleScreen() {
               <Text style={styles.buttonText}>밥</Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </BottomSheetView>
       </BottomSheet>
     </View>
   );
@@ -136,13 +142,18 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   calendarContainer: {
+    flex: 1,
     width: '100%',
+    backgroundColor: '#fff',
+    position: 'relative',  // position을 명시적으로 설정
+    zIndex: 0,
   },
   calendar: {
     width: '100%',
     height: '100%',
   },
   bottomSheet: {
+    backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
