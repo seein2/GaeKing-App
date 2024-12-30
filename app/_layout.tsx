@@ -5,7 +5,6 @@ import { View, Text } from 'react-native';
 import { UserProvider, useUser } from '@/context/userContext';
 import auth from '@/service/auth';
 import { DogProvider } from '@/context/dogContext';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 function AuthenticatedLayout() {
   const router = useRouter();
@@ -70,9 +69,7 @@ export default function RootLayout() {
   return (
     <UserProvider>
       <DogProvider>
-        <GestureHandlerRootView style={{ flex: 1 }}>
-          <AuthenticatedLayout />
-        </GestureHandlerRootView>
+            <AuthenticatedLayout />
       </DogProvider>
     </UserProvider>
   );
