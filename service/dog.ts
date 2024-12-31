@@ -117,7 +117,7 @@ const dog = {
 
     delete: async (dog_id: number): Promise<DogResponse> => {
         try {
-            const response = await api.delete(`/dogs/${dog_id}`);
+            const response = await api.delete(`/dog/${dog_id}`);
             return response.data;
         } catch (error) {
             throw error;
