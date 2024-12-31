@@ -1,6 +1,7 @@
-import React from 'react';
+// ScheduleBottomSheet.tsx
+import React, { useMemo } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetView, BottomSheetHandle } from '@gorhom/bottom-sheet';
 import { AntDesign } from '@expo/vector-icons';
 
 interface ScheduleBottomSheetProps {
@@ -11,6 +12,15 @@ interface ScheduleBottomSheetProps {
     onClose: () => void;
 }
 
+// 커스텀 핸들 컴포넌트
+const CustomHandle: React.FC<any> = ({ animatedIndex }) => {
+    return (
+        <View style={styles.handleContainer}>
+            <View style={styles.handle} />
+        </View>
+    );
+};
+
 export function ScheduleBottomSheet({
     bottomSheetRef,
     bottomSheetIndex,
@@ -18,14 +28,19 @@ export function ScheduleBottomSheet({
     onBottomSheetChange,
     onClose
 }: ScheduleBottomSheetProps) {
+    // 스냅포인트 정의
+    const snapPoints = useMemo(() => ['15%', '50%', '90%'], []);
+
     return (
         <BottomSheet
             ref={bottomSheetRef}
-            index={bottomSheetIndex}
-            snapPoints={['10%', '50%', '75%']}
+            index={0}
+            snapPoints={snapPoints}
             onChange={onBottomSheetChange}
-            enablePanDownToClose={true}
+            enablePanDownToClose={false}
+            handleComponent={CustomHandle}
             style={styles.bottomSheet}
+            animateOnMount={true}
         >
             <BottomSheetView style={styles.bottomSheetContent}>
                 <View style={styles.bottomSheetHeader}>
@@ -71,9 +86,24 @@ const styles = StyleSheet.create({
             width: 0,
             height: -4,
         },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
+        shadowOpacity: 0.15,
+        shadowRadius: 8,
         elevation: 5,
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24,
+    },
+    handleContainer: {
+        backgroundColor: '#fff',
+        paddingVertical: 12,
+        borderTopLeftRadius: 24,
+        borderTopRightRadius: 24,
+    },
+    handle: {
+        width: 40,
+        height: 4,
+        backgroundColor: '#DDD',
+        borderRadius: 2,
+        alignSelf: 'center',
     },
     bottomSheetContent: {
         flex: 1,
