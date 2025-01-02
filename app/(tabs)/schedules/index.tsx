@@ -1,13 +1,12 @@
 import React, { useState, useCallback, useRef } from 'react';
 import { View, StyleSheet } from 'react-native';
-import BottomSheet from '@gorhom/bottom-sheet';
 import { CustomCalendar } from '@/components/CustomCalendar';
-import { ScheduleBottomSheet } from '@/components/ScheduleBottomSheet';
+import { ScheduleCreationFlow } from '@/components/schedule/BottomSheet';
+import BottomSheet from '@gorhom/bottom-sheet';
 
 export default function ScheduleScreen() {
   const [selectedDate, setSelectedDate] = useState('');
-  const [bottomSheetIndex, setBottomSheetIndex] = useState(-1);
-  const bottomSheetRef = useRef<BottomSheet>(null);
+  const [showScheduleFlow, setShowScheduleFlow] = useState(true);
   const [markedDates, setMarkedDates] = useState<MarkedDates>({
     '2024-12-30': {
       dots: [
@@ -16,6 +15,8 @@ export default function ScheduleScreen() {
       ],
     }
   });
+
+  const dogSelectionRef = useRef<BottomSheet>(null);
 
   const handleDayPress = useCallback((day: any) => {
     const updatedMarkedDates = { ...markedDates };
@@ -35,12 +36,9 @@ export default function ScheduleScreen() {
 
     setMarkedDates(updatedMarkedDates);
     setSelectedDate(day.dateString);
-    setBottomSheetIndex(0);
+    setShowScheduleFlow(true);
+    dogSelectionRef.current?.expand();
   }, [selectedDate, markedDates]);
-
-  const handleCloseBottomSheet = useCallback(() => {
-    setBottomSheetIndex(-1);
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -48,13 +46,14 @@ export default function ScheduleScreen() {
         markedDates={markedDates}
         onDayPress={handleDayPress}
       />
-      <ScheduleBottomSheet
-        bottomSheetRef={bottomSheetRef}
-        bottomSheetIndex={bottomSheetIndex}
-        selectedDate={selectedDate}
-        onBottomSheetChange={setBottomSheetIndex}
-        onClose={handleCloseBottomSheet}
-      />
+      {showScheduleFlow && (
+        <ScheduleCreationFlow
+          selectedDate={selectedDate}
+          onComplete={() => setShowScheduleFlow(true)}
+          onClose={() => setShowScheduleFlow(true)}
+          snapPercentage={10}
+        />
+      )}
     </View>
   );
 }
