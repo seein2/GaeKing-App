@@ -3,12 +3,13 @@ import { useRouter } from 'expo-router';
 import dogService from '@/service/dog';
 import { useEffect, useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
+import { useDog } from '@/context/dogContext';
 
 const PlaceholderImage = require('@/assets/images/dog/profile.png');
 
 export default function Index() {
     const router = useRouter();
-    const [dogs, setDogs] = useState<Dog[]>([]);
+    const { dogs, setDogs } = useDog();
 
     // 강아지 목록 불러오기
     const loadDogs = async () => {
@@ -22,66 +23,10 @@ export default function Index() {
         loadDogs();
     }, []);
 
-    // 강아지 삭제 처리
-    const handleDeleteDog = async (dogId: number, dogName: string) => {
-        Alert.alert(
-            "강아지 삭제",
-            `${dogName}를(을) 정말 삭제하시겠습니까?`,
-            [
-                {
-                    text: "취소",
-                    style: "cancel"
-                },
-                {
-                    text: "삭제",
-                    style: "destructive",
-                    onPress: async () => {
-                        try {
-                            const response = await dogService.delete(dogId);
-                            if (response.success) {
-                                Alert.alert("성공", "강아지가 삭제되었습니다.");
-                                loadDogs(); // 목록 새로고침
-                            }
-                        } catch (error) {
-                            Alert.alert("오류", "강아지 삭제에 실패했습니다.");
-                        }
-                    }
-                }
-            ]
-        );
-    };
-
-    // 강아지 옵션 메뉴
-    const showDogOptions = (dog: Dog) => {
-        Alert.alert(
-            dog.dog_name,
-            "원하는 작업을 선택하세요",
-            [
-                {
-                    text: "상세 정보",
-                    onPress: () => router.push(`/dogs/${dog.dog_id}`)
-                },
-                {
-                    text: "수정",
-                    onPress: () => router.push(`/dogs/${dog.dog_id}/update`)
-                },
-                {
-                    text: "삭제",
-                    onPress: () => handleDeleteDog(dog.dog_id, dog.dog_name),
-                    style: "destructive"
-                },
-                {
-                    text: "취소",
-                    style: "cancel"
-                }
-            ]
-        );
-    };
-
     const renderDogItem: ListRenderItem<Dog> = ({ item }) => (
         <TouchableOpacity
             style={styles.dogCard}
-            onPress={() => showDogOptions(item)}
+            onPress={() => router.push(`/dogs/${item.dog_id}`)}
         >
             <Image
                 source={
