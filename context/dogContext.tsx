@@ -3,47 +3,40 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect } from 'react';
 
 interface DogContextType {
-    dog: Dog | null;
-    setDog: (dog: Dog | null) => Promise<void>;
+    dogs: Dog[];
+    setDogs: (dogs: Dog[]) => Promise<void>;
 }
 
-// Context 생성 시 타입 명시적 지정 및 초기값 설정
 const DogContext = createContext<DogContextType | null>(null);
 
 export function DogProvider({ children }: { children: React.ReactNode }) {
-    const [dog, setDog] = useState<Dog | null>(null);
+    const [dogs, setDogs] = useState<Dog[]>([]);
 
-    // 초기 로드
     useEffect(() => {
-        const loadDog = async () => {
+        const loadDogs = async () => {
             try {
-                const savedDog = await AsyncStorage.getItem('dog');
-                if (savedDog) {
-                    setDog(JSON.parse(savedDog));
+                const savedDogs = await AsyncStorage.getItem('dogs');
+                if (savedDogs) {
+                    setDogs(JSON.parse(savedDogs));
                 }
             } catch (error) {
-                console.error('강아지 로딩 실패:', error);
+                console.error('강아지 목록 로딩 실패:', error);
             }
         };
-        loadDog();
+        loadDogs();
     }, []);
 
-    // setDog를 래핑하여 AsyncStorage에도 저장
-    const setAndSaveDog = async (newDog: Dog | null) => {
+    const setAndSaveDogs = async (newDogs: Dog[]) => {
         try {
-            if (newDog) {
-                await AsyncStorage.setItem('dog', JSON.stringify(newDog));
-            } else {
-                await AsyncStorage.removeItem('dog');
-            }
-            setDog(newDog);
+            await AsyncStorage.setItem('dogs', JSON.stringify(newDogs));
+            setDogs(newDogs);
         } catch (error) {
-            console.error('강아지 저장 오류:', error);
+            console.error('강아지 목록 저장 오류:', error);
         }
     };
 
     return (
-        <DogContext.Provider value={{ dog, setDog: setAndSaveDog }}>
+        <DogContext.Provider value={{ dogs, setDogs: setAndSaveDogs }}>
             {children}
         </DogContext.Provider>
     );
