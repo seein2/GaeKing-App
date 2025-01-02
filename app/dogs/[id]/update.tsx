@@ -6,12 +6,14 @@ import * as ImagePicker from 'expo-image-picker';
 import dogService from '@/service/dog';
 import ImageViewer from '@/components/ImageViewer';
 import React from 'react';
+import { useDog } from '@/context/dogContext';
 
 const PlaceholderImage = require('@/assets/images/dog/profile.png');
 
 export default function EditDog() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const router = useRouter();
+    const { dogs, setDogs } = useDog();
     const [dogName, setDogName] = useState('');
     const [birthDate, setBirthDate] = useState<Date>(new Date());
     const [breedType, setBreedType] = useState('');
@@ -79,10 +81,21 @@ export default function EditDog() {
             const response = await dogService.update(Number(id), updateData);
 
             if (response.success) {
+                // 서버에서 업데이트된 강아지 정보를 받아와서 Context 업데이트
+                const dogResponse = await dogService.info(Number(id));
+                if (dogResponse.success && dogResponse.result) {
+                    const updatedDogs = dogs.map(dog =>
+                        dog.dog_id === Number(id)
+                            ? dogResponse.result.dog
+                            : dog
+                    );
+                    await setDogs(updatedDogs);
+                }
+
                 Alert.alert('성공', '강아지 정보가 수정되었습니다.', [
                     {
                         text: '확인',
-                        onPress: () => router.push('/(tabs)')
+                        onPress: () => router.back()
                     }
                 ]);
             }

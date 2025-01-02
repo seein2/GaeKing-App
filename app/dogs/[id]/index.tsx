@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
 import dogService from '@/service/dog';
 import DogInfoSection from '@/components/DogInfo';
 import DogOrgChart from '@/components/DogOrgChart';
+import { useDog } from '@/context/dogContext';
 
 export default function DogDetail() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const router = useRouter();
+    const { dogs, setDogs } = useDog();
     const [dogProfile, setDogProfile] = useState<DogProfile | null>(null);
 
     useEffect(() => {
@@ -38,6 +40,10 @@ export default function DogDetail() {
                         try {
                             const response = await dogService.delete(Number(id));
                             if (response.success) {
+                                // 삭제된 강아지를 Context에서도 제거
+                                const updatedDogs = dogs.filter(dog => dog.dog_id !== Number(id));
+                                await setDogs(updatedDogs);
+
                                 Alert.alert("성공", "강아지가 삭제되었습니다.");
                                 router.back();
                             }
