@@ -10,7 +10,7 @@ import React from 'react';
 const PlaceholderImage = require('@/assets/images/dog/profile.png');
 
 export default function RegisterDog() {
-  const { setDog } = useDog();
+  const { setDogs } = useDog();
   const router = useRouter();
   const [dogName, setDogName] = useState('');
   const [birthDate, setBirthDate] = useState(new Date());
@@ -50,7 +50,7 @@ export default function RegisterDog() {
         selectedImage // ImagePickerAsset 전달
       );
 
-      await setDog(result.result ?? null);
+      await setDogs(result.result ?? []);
 
       Alert.alert('성공', '강아지가 등록되었습니다.', [
         { text: '확인', onPress: () => router.replace('/(tabs)') }
