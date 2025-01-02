@@ -1,12 +1,6 @@
 import { ImagePickerAsset } from "expo-image-picker";
 import api from "./api";
 
-interface DogResponse {
-    success: boolean;
-    message: string;
-    result?: Dog;
-}
-
 const dog = {
     register: async (
         dog_name: string,
@@ -57,7 +51,7 @@ const dog = {
         return `${api.defaults.baseURL}/${imagePath}`;
     },
 
-    info: async (dog_id: number): Promise<DogResponse> => {
+    info: async (dog_id: number): Promise<DogProfile> => {
         try {
             const response = await api.get(`/dog/${dog_id}`);
             return response.data;
@@ -66,7 +60,7 @@ const dog = {
         }
     },
 
-    list: async (): Promise<DogResponse> => {
+    list: async (): Promise<DogList> => {
         try {
             const response = await api.get(`/dog`);
             return response.data;
