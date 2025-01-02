@@ -25,14 +25,14 @@ export default function EditDog() {
                 const response = await dogService.info(Number(id));
                 if (response.success && response.result) {
                     const dog = response.result;
-                    setDogName(dog.dog_name);
-                    if (dog.birth_date) {
-                        setBirthDate(new Date(dog.birth_date));
+                    setDogName(dog.dog.dog_name);
+                    if (dog.dog.birth_date) {
+                        setBirthDate(new Date(dog.dog.birth_date));
                     }
-                    setBreedType(dog.breed_type || '');
-                    setGender(dog.gender || "남자");
-                    if (dog.profile_image) {
-                        const imageUrl = dogService.getProfileImageUrl(dog.profile_image);
+                    setBreedType(dog.dog.breed_type || '');
+                    setGender(dog.dog.gender || "남자");
+                    if (dog.dog.profile_image) {
+                        const imageUrl = dogService.getProfileImageUrl(dog.dog.profile_image);
                         setProfileImage(imageUrl || undefined);
                     }
                 }
