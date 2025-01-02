@@ -16,14 +16,8 @@ interface DogProfile {
     };
 };
 
-interface DogList {
-    success: boolean;
-    message: string;
-    result?: Dog[];
-};
-
 interface DogResponse {
     success: boolean;
     message: string;
-    result?: Dog;
+    result?: Dog[];
 };

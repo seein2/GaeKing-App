@@ -60,7 +60,7 @@ const dog = {
         }
     },
 
-    list: async (): Promise<DogList> => {
+    list: async (): Promise<DogResponse> => {
         try {
             const response = await api.get(`/dog`);
             return response.data;
