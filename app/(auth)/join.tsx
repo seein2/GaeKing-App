@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { router } from 'expo-router';
 import AuthInput from '@/components/AuthInput';
 import auth from '@/service/auth';
@@ -16,15 +16,15 @@ export default function Join() {
       if (!id) {
         setError('아이디를 입력하세요.');
         return;
-    }
-    if (!password) {
+      }
+      if (!password) {
         setError('비밀번호를 입력하세요.');
         return;
-    }
-    if (!userName) {
-      setError('닉네임을 입력하세요.');
-      return;
-  }
+      }
+      if (!userName) {
+        setError('닉네임을 입력하세요.');
+        return;
+      }
       const response = await auth.join(id, password, userName);
       if (response.success) {
         // 회원가입 성공
@@ -40,32 +40,34 @@ export default function Join() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>회원가입</Text>
-      <AuthInput
-        value={id}
-        onChangeText={setId}
-        placeholder="아이디"
-      />
-      <AuthInput
-        value={password}
-        onChangeText={setPassword}
-        placeholder="비밀번호"
-        secureTextEntry
-      />
-      <AuthInput
-        value={userName}
-        onChangeText={setUserName}
-        placeholder="사용자 이름"
-      />
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-      <TouchableOpacity style={styles.button} onPress={handleJoin}>
-        <Text style={styles.buttonText}>회원가입</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => router.back()}>
-        <Text style={styles.linkText}>로그인으로 돌아가기</Text>
-      </TouchableOpacity>
-    </View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+      <View style={styles.container}>
+        <Text style={styles.title}>회원가입</Text>
+        <AuthInput
+          value={id}
+          onChangeText={setId}
+          placeholder="아이디"
+        />
+        <AuthInput
+          value={password}
+          onChangeText={setPassword}
+          placeholder="비밀번호"
+          secureTextEntry
+        />
+        <AuthInput
+          value={userName}
+          onChangeText={setUserName}
+          placeholder="사용자 이름"
+        />
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+        <TouchableOpacity style={styles.button} onPress={handleJoin}>
+          <Text style={styles.buttonText}>회원가입</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Text style={styles.linkText}>로그인으로 돌아가기</Text>
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
   );
 }
 

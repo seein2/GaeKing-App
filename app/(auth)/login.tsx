@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { router, Link } from 'expo-router';
 import AuthInput from '@/components/AuthInput';
 import auth from '@/service/auth';
@@ -30,7 +30,7 @@ export default function Login() {
                 router.replace('/');
             } else {
                 console.error(response.message);
-                
+
                 setError(response.message);
             }
         } catch (err) {
@@ -42,42 +42,44 @@ export default function Login() {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>로그인</Text>
-            <AuthInput
-                value={id}
-                onChangeText={setId}
-                placeholder="아이디"
-                accessibilityLabel="아이디 입력"
-                autoCapitalize="none"
-                autoCorrect={false}
-            />
-            <AuthInput
-                value={password}
-                onChangeText={setPassword}
-                placeholder="비밀번호"
-                accessibilityLabel="비밀번호 입력"
-                secureTextEntry
-                autoCapitalize="none"
-            />
-            {error ? <Text style={styles.error}>{error}</Text> : null}
-            <TouchableOpacity
-                style={[styles.button, isLoading && styles.buttonDisabled]}
-                onPress={handleLogin}
-                disabled={isLoading}
-            >
-                {isLoading ? (
-                    <ActivityIndicator color="white" />
-                ) : (
-                    <Text style={styles.buttonText}>로그인</Text>
-                )}
-            </TouchableOpacity>
-            <Link href="/join" asChild>
-                <TouchableOpacity>
-                    <Text style={styles.linkText}>회원가입 하기</Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+            <View style={styles.container}>
+                <Text style={styles.title}>로그인</Text>
+                <AuthInput
+                    value={id}
+                    onChangeText={setId}
+                    placeholder="아이디"
+                    accessibilityLabel="아이디 입력"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                />
+                <AuthInput
+                    value={password}
+                    onChangeText={setPassword}
+                    placeholder="비밀번호"
+                    accessibilityLabel="비밀번호 입력"
+                    secureTextEntry
+                    autoCapitalize="none"
+                />
+                {error ? <Text style={styles.error}>{error}</Text> : null}
+                <TouchableOpacity
+                    style={[styles.button, isLoading && styles.buttonDisabled]}
+                    onPress={handleLogin}
+                    disabled={isLoading}
+                >
+                    {isLoading ? (
+                        <ActivityIndicator color="white" />
+                    ) : (
+                        <Text style={styles.buttonText}>로그인</Text>
+                    )}
                 </TouchableOpacity>
-            </Link>
-        </View>
+                <Link href="/join" asChild>
+                    <TouchableOpacity>
+                        <Text style={styles.linkText}>회원가입 하기</Text>
+                    </TouchableOpacity>
+                </Link>
+            </View>
+        </TouchableWithoutFeedback>
     );
 }
 
