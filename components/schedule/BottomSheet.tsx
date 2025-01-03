@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import BottomSheet from '@gorhom/bottom-sheet';
 import { DogSelectionSheet } from './DogSelection';
 import { TypeSelectionSheet } from './ScheduleType';
@@ -8,10 +8,15 @@ interface ScheduleCreationFlowProps {
     selectedDate: string;
     onComplete: () => void;
     onClose: () => void;
-    snapPercentage?: number;
 }
 
 export function ScheduleCreationFlow({ selectedDate, onComplete, onClose }: ScheduleCreationFlowProps) {
+
+    // 날짜를 선택할 때마다 바텀시트가 올라오게
+    useEffect(() => {
+        dogSelectionRef.current?.snapToIndex(3);
+    }, [selectedDate]);
+
     // 각 시트의 ref
     const dogSelectionRef = useRef<BottomSheet>(null);
     const typeSelectionRef = useRef<BottomSheet>(null);
@@ -56,13 +61,27 @@ export function ScheduleCreationFlow({ selectedDate, onComplete, onClose }: Sche
             console.error('일정 등록 실패:', error);
         }
     };
+    const handleClose = () => {
+        // 현재 열려있는 시트들을 닫음.
+        detailsFormRef.current?.close();
+        typeSelectionRef.current?.close();
+
+        // 선택된 상태들을 초기화
+        setSelectedDog(null);
+        setSelectedType(null);
+
+        // 300ms 후에 첫 번째 시트(DogSelectionSheet)를 열고 크기를 조정합니다
+        setTimeout(() => {
+            dogSelectionRef.current?.snapToIndex(0);
+        }, 300);
+    };
 
     return (
         <>
             <DogSelectionSheet
                 ref={dogSelectionRef}
                 onSelect={handleDogSelect}
-                onClose={onClose}
+                onClose={handleClose}
                 selectedDate={selectedDate}
             />
 
@@ -70,7 +89,7 @@ export function ScheduleCreationFlow({ selectedDate, onComplete, onClose }: Sche
                 <TypeSelectionSheet
                     ref={typeSelectionRef}
                     onSelect={handleTypeSelect}
-                    onClose={onClose}
+                    onClose={handleClose}
                     selectedDog={selectedDog}
                 />
             )}
@@ -79,7 +98,7 @@ export function ScheduleCreationFlow({ selectedDate, onComplete, onClose }: Sche
                 <DetailsFormSheet
                     ref={detailsFormRef}
                     onSubmit={handleDetailsSubmit}
-                    onClose={onClose}
+                    onClose={handleClose}
                     selectedDog={selectedDog}
                     selectedType={selectedType}
                 />

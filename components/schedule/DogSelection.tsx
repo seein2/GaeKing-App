@@ -20,16 +20,10 @@ export const DogSelectionSheet = forwardRef<BottomSheet, DogSelectionSheetProps>
         // 여기서 등록된 강아지 목록을 가져옵니다
         const { dogs } = useDog();  // Context에서 dogs 배열을 가져와야 함
 
-        // onclose 구현
-        // onclose 구현
-        // onclose 구현
-        // onclose 구현
-        // onclose 구현
-
         return (
             <BottomSheet
                 ref={ref}
-                index={4}
+                index={3}
                 snapPoints={snapPoints}
                 enablePanDownToClose={false}
                 handleComponent={() => (
@@ -80,8 +74,8 @@ export const DogSelectionSheet = forwardRef<BottomSheet, DogSelectionSheetProps>
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: 'white',
-        paddingVertical: 12,
+        backgroundColor: 'gray',
+        paddingVertical: 8,
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,
         alignItems: 'center',
