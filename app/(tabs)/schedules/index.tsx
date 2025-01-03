@@ -51,7 +51,6 @@ export default function ScheduleScreen() {
           selectedDate={selectedDate}
           onComplete={() => setShowScheduleFlow(true)}
           onClose={() => setShowScheduleFlow(true)}
-          snapPercentage={10}
         />
       )}
     </View>
