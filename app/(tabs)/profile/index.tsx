@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Alert, } f
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import auth from '@/service/auth';
+import { useUser } from '@/context/userContext';
 
 interface MenuItem {
     icon: JSX.Element;
@@ -13,6 +14,8 @@ interface MenuItem {
 }
 
 export default function ProfileScreen() {
+    const { user } = useUser();
+
     const handleLogout = () => {
         Alert.alert(
             "로그아웃",
@@ -99,8 +102,8 @@ export default function ProfileScreen() {
                     style={styles.profileImage}
                 />
                 <View style={styles.headerText}>
-                    <Text style={styles.name}>사용자 이름</Text>
-                    <Text style={styles.email}>user@example.com</Text>
+                    <Text style={styles.name}>{user?.user_name}</Text>
+                    <Text style={styles.email}>{user?.user_id}</Text>
                 </View>
             </View>
 
