@@ -1,5 +1,5 @@
 import React, { useMemo, forwardRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Switch } from 'react-native';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { AntDesign } from '@expo/vector-icons';
 
@@ -22,43 +22,53 @@ interface DetailsFormSheetProps {
         memo: string;
         repeat: string;
         notification: string;
+        is_completed: boolean;
     }) => void;
-    onClose?: () => void;
+    onClose: () => void;
+    onBack: () => void;
     selectedDog: Dog;
     selectedType: string;
 }
 
 export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
-    ({ onSubmit, onClose, selectedDog, selectedType }, ref) => {
+    ({ onSubmit, onClose, onBack, selectedDog, selectedType }, ref) => {
         const snapPoints = useMemo(() => ['10%', '30%', '50%', '90%'], []);
 
         const [memo, setMemo] = useState('');
         const [repeat, setRepeat] = useState('none');
         const [notification, setNotification] = useState('none');
+        const [isCompleted, setIsCompleted] = useState(false);
 
         const handleSubmit = () => {
             onSubmit({
                 memo,
-                repeat,
-                notification
+                repeat: isCompleted ? 'none' : repeat,
+                notification: isCompleted ? 'none' : notification,
+                is_completed: isCompleted
             });
         };
 
         return (
             <BottomSheet
                 ref={ref}
-                index={0}
+                index={-1}
                 snapPoints={snapPoints}
                 enablePanDownToClose={false}
+                handleComponent={() => (
+                    <View style={styles.header}>
+                        <View style={styles.handle} />
+                    </View>
+                )}
             >
                 <View style={styles.container}>
                     <View style={styles.titleContainer}>
+                        <TouchableOpacity onPress={onBack}>
+                            <AntDesign name="left" size={24} color="#666" />
+                        </TouchableOpacity>
                         <Text style={styles.title}>일정 상세 설정</Text>
-                        {onClose && (
-                            <TouchableOpacity onPress={onClose}>
-                                <AntDesign name="close" size={24} color="#666" />
-                            </TouchableOpacity>
-                        )}
+                        <TouchableOpacity onPress={onClose}>
+                            <AntDesign name="close" size={24} color="#666" />
+                        </TouchableOpacity>
                     </View>
 
                     <BottomSheetScrollView contentContainerStyle={styles.scrollContent}>
@@ -75,10 +85,34 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
                             />
                         </View>
 
-                        {/* 반복 설정 */}
+                        {/* 완료 상태 토글 */}
                         <View style={styles.section}>
+                            <View style={styles.completionContainer}>
+                                <View>
+                                    <Text style={styles.sectionTitle}>완료 상태</Text>
+                                    <Text style={styles.completionText}>
+                                        {isCompleted ? '이미 완료된 일정입니다' : '완료 예정인 일정입니다'}
+                                    </Text>
+                                </View>
+                                <Switch
+                                    value={isCompleted}
+                                    onValueChange={(value) => {
+                                        setIsCompleted(value);
+                                        if (value) {
+                                            setNotification('none');
+                                            setRepeat('none');
+                                        }
+                                    }}
+                                    trackColor={{ false: '#767577', true: '#81b0ff' }}
+                                    thumbColor={isCompleted ? '#f5dd4b' : '#f4f3f4'}
+                                />
+                            </View>
+                        </View>
+
+                        {/* 반복 설정 */}
+                        <View style={[styles.section, isCompleted && styles.disabledSection]}>
                             <Text style={styles.sectionTitle}>반복</Text>
-                            <View style={styles.optionsContainer}>
+                            <View style={styles.completionContainer}>
                                 {REPEAT_OPTIONS.map((option) => (
                                     <TouchableOpacity
                                         key={option.id}
@@ -86,7 +120,8 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
                                             styles.optionButton,
                                             repeat === option.id && styles.selectedOption
                                         ]}
-                                        onPress={() => setRepeat(option.id)}
+                                        onPress={() => !isCompleted && setRepeat(option.id)}
+                                        disabled={isCompleted}
                                     >
                                         <Text style={[
                                             styles.optionText,
@@ -97,10 +132,15 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
                                     </TouchableOpacity>
                                 ))}
                             </View>
+                            {isCompleted && (
+                                <Text style={styles.disabledText}>
+                                    완료된 일정은 반복을 설정할 수 없습니다
+                                </Text>
+                            )}
                         </View>
 
                         {/* 알림 설정 */}
-                        <View style={styles.section}>
+                        <View style={[styles.section, isCompleted && styles.disabledSection]}>
                             <Text style={styles.sectionTitle}>알림</Text>
                             <View style={styles.optionsContainer}>
                                 {NOTIFICATION_OPTIONS.map((option) => (
@@ -110,7 +150,8 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
                                             styles.optionButton,
                                             notification === option.id && styles.selectedOption
                                         ]}
-                                        onPress={() => setNotification(option.id)}
+                                        onPress={() => !isCompleted && setNotification(option.id)}
+                                        disabled={isCompleted}
                                     >
                                         <Text style={[
                                             styles.optionText,
@@ -121,14 +162,24 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
                                     </TouchableOpacity>
                                 ))}
                             </View>
+                            {isCompleted && (
+                                <Text style={styles.disabledText}>
+                                    완료된 일정은 알림을 설정할 수 없습니다
+                                </Text>
+                            )}
                         </View>
 
                         {/* 등록 버튼 */}
                         <TouchableOpacity
-                            style={styles.submitButton}
+                            style={[
+                                styles.submitButton,
+                                isCompleted ? styles.completedSubmitButton : styles.normalSubmitButton
+                            ]}
                             onPress={handleSubmit}
                         >
-                            <Text style={styles.submitButtonText}>일정 등록</Text>
+                            <Text style={styles.submitButtonText}>
+                                {isCompleted ? '완료된 일정 등록' : '일정 등록'}
+                            </Text>
                         </TouchableOpacity>
                     </BottomSheetScrollView>
                 </View>
@@ -138,6 +189,19 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
 );
 
 const styles = StyleSheet.create({
+    header: {
+        backgroundColor: 'white',
+        paddingVertical: 12,
+        borderTopLeftRadius: 15,
+        borderTopRightRadius: 15,
+        alignItems: 'center',
+    },
+    handle: {
+        width: 40,
+        height: 4,
+        borderRadius: 2,
+        backgroundColor: '#DDD',
+    },
     container: {
         flex: 1,
         backgroundColor: 'white',
@@ -154,6 +218,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#333',
+        flex: 1,
+        textAlign: 'center',
     },
     scrollContent: {
         padding: 16,
@@ -173,6 +239,19 @@ const styles = StyleSheet.create({
         padding: 12,
         height: 100,
         textAlignVertical: 'top',
+    },
+    completionContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#f8f9fa',
+        padding: 12,
+        borderRadius: 8,
+    },
+    completionText: {
+        fontSize: 14,
+        color: '#666',
+        marginTop: 4,
     },
     optionsContainer: {
         flexDirection: 'row',
@@ -196,12 +275,26 @@ const styles = StyleSheet.create({
     selectedOptionText: {
         color: 'white',
     },
+    disabledSection: {
+        opacity: 0.5,
+    },
+    disabledText: {
+        fontSize: 12,
+        color: '#666',
+        marginTop: 4,
+    },
     submitButton: {
-        backgroundColor: '#007AFF',
         borderRadius: 8,
         padding: 16,
         alignItems: 'center',
         marginTop: 24,
+        marginBottom: 32,
+    },
+    normalSubmitButton: {
+        backgroundColor: '#007AFF',
+    },
+    completedSubmitButton: {
+        backgroundColor: '#FF9500',
     },
     submitButtonText: {
         color: 'white',

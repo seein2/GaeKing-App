@@ -3,36 +3,30 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { AntDesign } from '@expo/vector-icons';
 
-interface ScheduleType {
-    id: string;
-    title: string;
-    icon: keyof typeof AntDesign.glyphMap;
-    color: string;
-}
-
-const SCHEDULE_TYPES: ScheduleType[] = [
-    { id: '1', title: '식사', icon: 'calendar', color: '#FF6B6B' },
-    { id: '2', title: '산책', icon: 'pushpin', color: '#4ECDC4' },
-    { id: '3', title: '간식', icon: 'heart', color: '#FFD93D' },
-    { id: '4', title: '목욕', icon: 'star', color: '#6C5CE7' },
-    { id: '5', title: '병원', icon: 'medicinebox', color: '#A8E6CF' },
-    { id: '6', title: '기타', icon: 'ellipsis1', color: '#95A5A6' },
-];
+const SCHEDULE_TYPES = [
+    { id: '1', title: '식사', icon: '🍽️', color: '#FF6B6B', defaultDescription: '사료 급여' },
+    { id: '2', title: '산책', icon: '🦮', color: '#4ECDC4', defaultDescription: '산책' },
+    { id: '3', title: '간식', icon: '🦴', color: '#FFD93D', defaultDescription: '간식 급여' },
+    { id: '4', title: '목욕', icon: '🛁', color: '#6C5CE7', defaultDescription: '목욕' },
+    { id: '5', title: '병원', icon: '🏥', color: '#A8E6CF', defaultDescription: '병원 방문' },
+    { id: '6', title: '기타', icon: '📝', color: '#95A5A6' },
+] as const;
 
 interface TypeSelectionSheetProps {
     onSelect: (typeId: string) => void;
-    onClose?: () => void;
-    selectedDog: Dog;  // 이전 단계에서 선택한 강아지 정보
+    onClose: () => void;
+    onBack: () => void;
+    selectedDog: Dog;
 }
 
 export const TypeSelectionSheet = forwardRef<BottomSheet, TypeSelectionSheetProps>(
-    ({ onSelect, onClose, selectedDog }, ref) => {
+    ({ onSelect, onClose, onBack, selectedDog }, ref) => {
         const snapPoints = useMemo(() => ['10%', '30%', '50%', '90%'], []);
 
         return (
             <BottomSheet
                 ref={ref}
-                index={0}
+                index={-1}
                 snapPoints={snapPoints}
                 enablePanDownToClose={false}
                 handleComponent={() => (
@@ -43,17 +37,17 @@ export const TypeSelectionSheet = forwardRef<BottomSheet, TypeSelectionSheetProp
             >
                 <View style={styles.container}>
                     <View style={styles.titleContainer}>
+                        <TouchableOpacity onPress={onBack}>
+                            <AntDesign name="left" size={24} color="#666" />
+                        </TouchableOpacity>
                         <Text style={styles.title}>일정 유형 선택</Text>
-                        {onClose && (
-                            <TouchableOpacity onPress={onClose}>
-                                <AntDesign name="close" size={24} color="#666" />
-                            </TouchableOpacity>
-                        )}
+                        <TouchableOpacity onPress={onClose}>
+                            <AntDesign name="close" size={24} color="#666" />
+                        </TouchableOpacity>
                     </View>
                     <Text style={styles.subtitle}>
                         {selectedDog.dog_name}의 일정 유형을 선택해주세요
                     </Text>
-
                     <BottomSheetScrollView contentContainerStyle={styles.scrollContent}>
                         {SCHEDULE_TYPES.map((type) => (
                             <TouchableOpacity
@@ -62,7 +56,7 @@ export const TypeSelectionSheet = forwardRef<BottomSheet, TypeSelectionSheetProp
                                 onPress={() => onSelect(type.id)}
                             >
                                 <View style={[styles.iconContainer, { backgroundColor: type.color }]}>
-                                    <AntDesign name={type.icon} size={24} color="white" />
+                                    <Text style={styles.icon}>{type.icon}</Text>
                                 </View>
                                 <Text style={styles.typeTitle}>{type.title}</Text>
                             </TouchableOpacity>
@@ -103,6 +97,8 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: 'bold',
         color: '#333',
+        flex: 1,
+        textAlign: 'center',
     },
     subtitle: {
         fontSize: 14,
@@ -129,6 +125,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 8,
+    },
+    icon: {
+        fontSize: 24,
     },
     typeTitle: {
         fontSize: 16,

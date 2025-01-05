@@ -1,4 +1,4 @@
-import React, { useMemo, forwardRef, useState } from 'react';
+import React, { useMemo, forwardRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { AntDesign } from '@expo/vector-icons';
@@ -9,21 +9,19 @@ const PlaceholderImage = require('@/assets/images/dog/profile.png');
 
 interface DogSelectionSheetProps {
     onSelect: (dog: Dog) => void;
-    onClose?: () => void;
+    onClose: () => void;
     selectedDate: string;
 }
 
 export const DogSelectionSheet = forwardRef<BottomSheet, DogSelectionSheetProps>(
     ({ onSelect, onClose, selectedDate }, ref) => {
         const snapPoints = useMemo(() => ['10%', '30%', '50%', '90%'], []);
-
-        // 여기서 등록된 강아지 목록을 가져옵니다
-        const { dogs } = useDog();  // Context에서 dogs 배열을 가져와야 함
+        const { dogs } = useDog();
 
         return (
             <BottomSheet
                 ref={ref}
-                index={3}
+                index={-1}
                 snapPoints={snapPoints}
                 enablePanDownToClose={false}
                 handleComponent={() => (
@@ -35,11 +33,9 @@ export const DogSelectionSheet = forwardRef<BottomSheet, DogSelectionSheetProps>
                 <View style={styles.container}>
                     <View style={styles.titleContainer}>
                         <Text style={styles.title}>강아지 선택</Text>
-                        {onClose && (
-                            <TouchableOpacity onPress={onClose}>
-                                <AntDesign name="close" size={24} color="#666" />
-                            </TouchableOpacity>
-                        )}
+                        <TouchableOpacity onPress={onClose}>
+                            <AntDesign name="close" size={24} color="#666" />
+                        </TouchableOpacity>
                     </View>
                     <Text style={styles.subtitle}>
                         {new Date(selectedDate).toLocaleDateString('ko-KR', {
@@ -74,8 +70,8 @@ export const DogSelectionSheet = forwardRef<BottomSheet, DogSelectionSheetProps>
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: 'gray',
-        paddingVertical: 8,
+        backgroundColor: 'white',
+        paddingVertical: 12,
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,
         alignItems: 'center',
