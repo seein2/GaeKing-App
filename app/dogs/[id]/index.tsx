@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import dogService from '@/service/dog';
@@ -56,10 +56,10 @@ export default function DogDetail() {
         );
     };
 
-    if (!dogProfile) {
+    if (!dogProfile?.result) {
         return (
             <View style={styles.container}>
-                <Text>강아지 정보를 불러오는 중...</Text>
+                <Text>강아지 정보를 불러올 수 없습니다.</Text>
             </View>
         );
     }
