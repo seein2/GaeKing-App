@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import BottomSheet from '@gorhom/bottom-sheet';
-import { AntDesign } from '@expo/vector-icons';
 import { DogSelectionSheet } from './DogSelection';
 import { TypeSelectionSheet } from './ScheduleType';
 import { DetailsFormSheet } from './Detail';
+import scheduleService from '@/service/schedule';
 
 interface ScheduleCreationFlowProps {
     selectedDate: string;
@@ -15,7 +14,7 @@ interface ScheduleCreationFlowProps {
 export function ScheduleCreationFlow({ selectedDate, onComplete, onClose }: ScheduleCreationFlowProps) {
     // 선택된 데이터 상태 관리
     const [selectedDog, setSelectedDog] = useState<Dog | null>(null);
-    const [selectedType, setSelectedType] = useState<string | null>(null);
+    const [selectedType, setSelectedType] = useState<ScheduleType | null>(null);
     const [currentStep, setCurrentStep] = useState(1);
 
     // 각 시트의 ref
@@ -24,13 +23,11 @@ export function ScheduleCreationFlow({ selectedDate, onComplete, onClose }: Sche
     const detailsFormRef = useRef<BottomSheet>(null);
 
     useEffect(() => {
-        // 약간의 지연을 주어 BottomSheet가 완전히 초기화된 후 snapToIndex를 호출
         setTimeout(() => {
             dogSelectionRef.current?.snapToIndex(3);
         }, 100);
     }, [selectedDate]);
 
-    // 핸들러들
     const handleDogSelect = (dog: Dog) => {
         setSelectedDog(dog);
         setCurrentStep(2);
@@ -38,11 +35,52 @@ export function ScheduleCreationFlow({ selectedDate, onComplete, onClose }: Sche
         setTimeout(() => typeSelectionRef.current?.expand(), 300);
     };
 
-    const handleTypeSelect = (typeId: string) => {
-        setSelectedType(typeId);
+    const handleTypeSelect = (type: ScheduleType) => {
+        setSelectedType(type);
         setCurrentStep(3);
         typeSelectionRef.current?.close();
         setTimeout(() => detailsFormRef.current?.expand(), 300);
+    };
+
+    const handleDetailsSubmit = async (details: {
+        description: string;
+        repeat: {
+            type: RepeatType;
+            count?: number;
+        };
+        times: TimeSlot[];
+        notification: {
+            enabled: boolean;
+            minutes: number;
+        };
+    }) => {
+        if (!selectedDog || !selectedType) return;
+
+        try {
+            const scheduleData: ScheduleCreate = {
+                dogId: selectedDog.dog_id,
+                type: selectedType,
+                date: selectedDate,
+                description: details.description,
+                repeat: details.repeat,
+                times: details.times,
+                notification: details.notification
+            };
+
+            await scheduleService.create(scheduleData);
+            
+            detailsFormRef.current?.close();
+            onComplete();
+
+            // 상태 초기화
+            setCurrentStep(1);
+            setSelectedDog(null);
+            setSelectedType(null);
+            
+            setTimeout(() => dogSelectionRef.current?.snapToIndex(3), 300);
+        } catch (error) {
+            console.error('일정 등록 실패:', error);
+        }
     };
 
     const handleBack = () => {
@@ -58,37 +96,7 @@ export function ScheduleCreationFlow({ selectedDate, onComplete, onClose }: Sche
         }
     };
 
-    const handleDetailsSubmit = async (details: {
-        memo: string;
-        repeat: string;
-        notification: string;
-    }) => {
-        if (!selectedDog || !selectedType) return;
-
-        try {
-            // API 호출로 일정 등록
-            // const response = await scheduleService.create({
-            //     dogId: selectedDog.id,
-            //     type: selectedType,
-            //     date: selectedDate,
-            //     ...details
-            // });
-
-            detailsFormRef.current?.close();
-            onComplete();
-
-            // 상태 초기화
-            setCurrentStep(1);
-            setSelectedDog(null);
-            setSelectedType(null);
-            setTimeout(() => dogSelectionRef.current?.snapToIndex(3), 300);
-        } catch (error) {
-            console.error('일정 등록 실패:', error);
-        }
-    };
-
     const handleClose = () => {
-        // 모든 시트를 닫고 상태 초기화
         detailsFormRef.current?.close();
         typeSelectionRef.current?.close();
         dogSelectionRef.current?.close();

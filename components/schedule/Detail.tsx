@@ -4,7 +4,7 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { AntDesign } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const REPEAT_OPTIONS = [
+const REPEAT_OPTIONS: Array<{ id: RepeatType; title: string }> = [
     { id: 'none', title: '반복 안함' },
     { id: 'daily', title: '매일' },
     { id: 'weekly', title: '매주' },
@@ -27,7 +27,7 @@ interface DetailsFormSheetProps {
     onSubmit: (details: {
         description: string;
         repeat: {
-            type: string;
+            type: RepeatType;
             count?: number;
         };
         times: TimeSlot[];
@@ -39,7 +39,7 @@ interface DetailsFormSheetProps {
     onClose: () => void;
     onBack: () => void;
     selectedDog: Dog;
-    selectedType: string;
+    selectedType: ScheduleType;
 }
 
 export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
@@ -47,7 +47,7 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
         const snapPoints = useMemo(() => ['90%'], []);
 
         const [description, setdescription] = useState('');
-        const [repeat, setRepeat] = useState('none');
+        const [repeat, setRepeat] = useState<RepeatType>('none');
         const [repeatCount, setRepeatCount] = useState(1);
         const [enableTimeSelection, setEnableTimeSelection] = useState(false);
         const [times, setTimes] = useState<TimeSlot[]>([]);

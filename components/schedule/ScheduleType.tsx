@@ -13,7 +13,7 @@ const SCHEDULE_TYPES = [
 ] as const;
 
 interface TypeSelectionSheetProps {
-    onSelect: (typeId: string) => void;
+    onSelect: (type: ScheduleType) => void;
     onClose: () => void;
     onBack: () => void;
     selectedDog: Dog;
