@@ -1,14 +1,6 @@
 import api from '@/service/api';
 import { tokenStorage } from './tokenStorage';
 
-interface AuthResponse {
-  success: boolean;
-  message: string;
-  accessToken?: string;
-  refreshToken?: string;
-  user?: User;
-}
-
 const auth = {
   join: async (user_id: string, password: string, user_name: string): Promise<AuthResponse> => {
     try {
