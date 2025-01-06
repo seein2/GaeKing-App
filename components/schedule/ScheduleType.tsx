@@ -4,12 +4,12 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { AntDesign } from '@expo/vector-icons';
 
 const SCHEDULE_TYPES = [
-    { id: '1', title: '식사', icon: '🍽️', color: '#FF6B6B', defaultDescription: '사료 급여' },
-    { id: '2', title: '산책', icon: '🦮', color: '#4ECDC4', defaultDescription: '산책' },
-    { id: '3', title: '간식', icon: '🦴', color: '#FFD93D', defaultDescription: '간식 급여' },
-    { id: '4', title: '목욕', icon: '🛁', color: '#6C5CE7', defaultDescription: '목욕' },
-    { id: '5', title: '병원', icon: '🏥', color: '#A8E6CF', defaultDescription: '병원 방문' },
-    { id: '6', title: '기타', icon: '📝', color: '#95A5A6' },
+    { title: '식사', icon: '🍽️', color: '#FF6B6B', defaultDescription: '사료 급여' },
+    { title: '산책', icon: '🦮', color: '#4ECDC4', defaultDescription: '산책' },
+    { title: '간식', icon: '🦴', color: '#FFD93D', defaultDescription: '간식 급여' },
+    { title: '목욕', icon: '🛁', color: '#6C5CE7', defaultDescription: '목욕' },
+    { title: '병원', icon: '🏥', color: '#A8E6CF', defaultDescription: '병원 방문' },
+    { title: '기타', icon: '📝', color: '#95A5A6' },
 ] as const;
 
 interface TypeSelectionSheetProps {
@@ -51,9 +51,9 @@ export const TypeSelectionSheet = forwardRef<BottomSheet, TypeSelectionSheetProp
                     <BottomSheetScrollView contentContainerStyle={styles.scrollContent}>
                         {SCHEDULE_TYPES.map((type) => (
                             <TouchableOpacity
-                                key={type.id}
+                                key={type.title}
                                 style={styles.typeItem}
-                                onPress={() => onSelect(type.id)}
+                                onPress={() => onSelect(type.title)}
                             >
                                 <View style={[styles.iconContainer, { backgroundColor: type.color }]}>
                                     <Text style={styles.icon}>{type.icon}</Text>
