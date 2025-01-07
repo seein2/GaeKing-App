@@ -1,7 +1,7 @@
 import api from "./api";
 
 const schedule = {
-    create: async (scheduleData: ScheduleCreate): Promise<ScheduleResponse> => {
+    create: async (scheduleData: ScheduleCreate): Promise<ScheduleResponse> => { // 하나의 객체로 받음.
         try {
             const response = await api.post('/schedule', scheduleData);
             return response.data;
@@ -12,18 +12,19 @@ const schedule = {
 
     list: async (date: string): Promise<ScheduleResponse> => {
         try {
-            const response = await api.get('/schedule', {
+            const response = await api.get(`/schedule/list/${date}`, {
                 params: { date }
             });
+            console.log('Service response:', response.data); // 서비스 응답 확인
             return response.data;
         } catch (error) {
             throw error;
         }
     },
 
-    info: async (scheduleId: number): Promise<ScheduleDetail> => {
+    info: async (schedule_id: number): Promise<ScheduleDetail> => {
         try {
-            const response = await api.get(`/schedule/${scheduleId}`);
+            const response = await api.get(`/schedule/${schedule_id}`);
             return response.data;
         } catch (error) {
             throw error;
@@ -31,20 +32,20 @@ const schedule = {
     },
 
     update: async (
-        scheduleId: number,
-        updateData: Partial<Omit<ScheduleCreate, 'dogId'>>
+        schedule_id: number,
+        updateData: Partial<Omit<ScheduleCreate, 'dog_id'>>
     ): Promise<ScheduleResponse> => {
         try {
-            const response = await api.put(`/schedule/${scheduleId}`, updateData);
+            const response = await api.put(`/schedule/${schedule_id}`, updateData);
             return response.data;
         } catch (error) {
             throw error;
         }
     },
 
-    delete: async (scheduleId: number): Promise<ScheduleResponse> => {
+    delete: async (schedule_id: number): Promise<ScheduleResponse> => {
         try {
-            const response = await api.delete(`/schedule/${scheduleId}`);
+            const response = await api.delete(`/schedule/${schedule_id}`);
             return response.data;
         } catch (error) {
             throw error;
