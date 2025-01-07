@@ -17,15 +17,7 @@ type RepeatType = 'none' | 'daily' | 'weekly' | 'monthly';
 interface TimeSlot {
   hour: number;
   minute: number;
-}
-
-// 기본 스케줄 인터페이스
-interface Schedule {
-  type: ScheduleType;
-  dogId: number;
-  date: string;  // ISO 8601 형식의 날짜
-  time?: string; // HH:mm 형식
-}
+};
 
 // 캘린더 표시용 마커 인터페이스
 interface MarkedDates {
@@ -38,7 +30,7 @@ interface MarkedDates {
 
 // 스케줄 생성 요청 인터페이스
 interface ScheduleCreate {
-  dogId: number;
+  dog_id: number;
   type: ScheduleType;
   date: string;
   description?: string;
@@ -51,44 +43,37 @@ interface ScheduleCreate {
     enabled: boolean;
     minutes: number;  // 0, 10, 30, 60 중 하나
   };
-}
+};
 
 // API 응답 스케줄 상세 정보
 interface ScheduleDetail {
   schedule_id: number;
   dog_id: number;
-  type: ScheduleType;
-  date: string;
-  memo?: string;
-  repeat: {
-    type: RepeatType;
-    count?: number;
-    times?: TimeSlot[];
-  };
-  notification: {
-    enabled: boolean;
-    minutes: number;
-  };
-  completed_times: string[];  // ISO 8601 형식의 완료 시간 배열
-  created_at: string;
-  updated_at: string;
-}
+  dog_name: string;
+  schedule_type: ScheduleType;
+  description: string | null;
+  notification_enabled: boolean | null;
+  notification_minutes: number | null;
+  scheduled_time: string | null;
+  repeat_type: string | null;
+  repeat_count: number | null;
+};
 
 // API 응답 래퍼 인터페이스
 interface ScheduleResponse {
-  status: number;
+  success: boolean;
   message: string;
-  data: {
+  result: {
     schedules: ScheduleDetail[];
   };
-}
+};
 
 // 스케줄 완료 상태 업데이트 요청 인터페이스
 interface ScheduleCompletionUpdate {
   schedule_id: number;
   completion_time: string;  // ISO 8601 형식
   is_completed: boolean;
-}
+};
 
 // UI에서 사용할 스케줄 타입별 메타데이터
 const SCHEDULE_TYPE_META = {
