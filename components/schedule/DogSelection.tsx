@@ -15,7 +15,7 @@ interface DogSelectionSheetProps {
 
 export const DogSelectionSheet = forwardRef<BottomSheet, DogSelectionSheetProps>(
     ({ onSelect, onClose, selectedDate }, ref) => {
-        const snapPoints = useMemo(() => ['10%', '30%', '50%', '90%'], []);
+        const snapPoints = useMemo(() => ['10%', '17%', '50%', '90%'], []);
         const { dogs } = useDog();
 
         return (
