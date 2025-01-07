@@ -15,7 +15,6 @@ const schedule = {
             const response = await api.get(`/schedule/list/${date}`, {
                 params: { date }
             });
-            console.log('Service response:', response.data); // 서비스 응답 확인
             return response.data;
         } catch (error) {
             throw error;
