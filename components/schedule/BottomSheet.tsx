@@ -24,7 +24,7 @@ export function ScheduleCreationFlow({ selectedDate, onComplete, onClose }: Sche
 
     useEffect(() => {
         setTimeout(() => {
-            dogSelectionRef.current?.snapToIndex(3);
+            dogSelectionRef.current?.snapToIndex(1);
         }, 100);
     }, [selectedDate]);
 
@@ -32,14 +32,14 @@ export function ScheduleCreationFlow({ selectedDate, onComplete, onClose }: Sche
         setSelectedDog(dog);
         setCurrentStep(2);
         dogSelectionRef.current?.close();
-        setTimeout(() => typeSelectionRef.current?.expand(), 300);
+        setTimeout(() => typeSelectionRef.current?.expand(), 200);
     };
 
     const handleTypeSelect = (type: ScheduleType) => {
         setSelectedType(type);
         setCurrentStep(3);
         typeSelectionRef.current?.close();
-        setTimeout(() => detailsFormRef.current?.expand(), 300);
+        setTimeout(() => detailsFormRef.current?.expand(), 200);
     };
 
     const handleDetailsSubmit = async (details: {
@@ -58,7 +58,7 @@ export function ScheduleCreationFlow({ selectedDate, onComplete, onClose }: Sche
 
         try {
             const scheduleData: ScheduleCreate = {
-                dogId: selectedDog.dog_id,
+                dog_id: selectedDog.dog_id,
                 type: selectedType,
                 date: selectedDate,
                 description: details.description,
