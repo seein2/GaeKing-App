@@ -57,11 +57,10 @@ export default function ScheduleScreen() {
     try {
       setLoading(true);
       const response = await scheduleService.list(date);
-      console.log('Response from server:', response);
-  
+
       if (response.success && Array.isArray(response.result)) {
         setSchedules(response.result);
-        
+
         const newMarkedDates = { ...markedDates };
         newMarkedDates[date] = {
           ...newMarkedDates[date],
