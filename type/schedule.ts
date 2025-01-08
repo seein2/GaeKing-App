@@ -50,22 +50,26 @@ interface ScheduleDetail {
   schedule_id: number;
   dog_id: number;
   dog_name: string;
-  schedule_type: ScheduleType;
+  schedule_type: keyof typeof SCHEDULE_TYPE_META;
   description: string | null;
-  notification_enabled: boolean | null;
-  notification_minutes: number | null;
-  scheduled_time: string | null;
   repeat_type: string | null;
-  repeat_count: number | null;
+  notification: {
+    enabled: boolean;
+    minutes: number | null;
+  };
+  instances: Array<{
+    instance_id: number;
+    scheduled_time: string | null;
+    is_completed: boolean;
+    completion_time: string | null;
+  }>;
 };
 
 // API 응답 래퍼 인터페이스
 interface ScheduleResponse {
   success: boolean;
   message: string;
-  result: {
-    schedules: ScheduleDetail[];
-  };
+  result: ScheduleDetail | null;
 };
 
 // 스케줄 완료 상태 업데이트 요청 인터페이스
