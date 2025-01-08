@@ -21,9 +21,9 @@ const schedule = {
         }
     },
 
-    info: async (schedule_id: number): Promise<ScheduleDetail> => {
+    detail: async (schedule_id: number, date: string): Promise<ScheduleResponse> => {
         try {
-            const response = await api.get(`/schedule/${schedule_id}`);
+            const response = await api.get(`/schedule/${schedule_id}?date=${date}`);
             return response.data;
         } catch (error) {
             throw error;
