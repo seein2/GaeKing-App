@@ -3,6 +3,7 @@ import { View, StyleSheet, Keyboard, TouchableWithoutFeedback, ScrollView, Touch
 import { CustomCalendar } from '@/components/CustomCalendar';
 import { ScheduleCreationFlow } from '@/components/schedule/BottomSheet';
 import scheduleService from '@/service/schedule';
+import { router, usePathname } from 'expo-router';
 
 const SCHEDULE_TYPE_META = {
   '식사': {
@@ -138,11 +139,14 @@ export default function ScheduleScreen() {
             <ActivityIndicator style={styles.loader} color="#00adf5" />
           ) : (
             <ScrollView style={styles.scrollView}>
-              {schedules.map((schedule: any) => (
+              {schedules.map((schedule: any, index: number) => (
                 <TouchableOpacity
-                  key={`${schedule.schedule_id}-${schedule.scheduled_time}`}
+                  key={`${schedule.schedule_id}-${schedule.scheduled_time || 'unset'}-${index}`}
                   style={styles.scheduleCard}
-                  onPress={() => {/* TODO: Navigate to detail */ }}
+                  onPress={() => router.push({
+                    pathname: "/schedules/[id]",
+                    params: { id: schedule.schedule_id, date: selectedDate }
+                  })}
                   activeOpacity={0.7}
                 >
                   <View style={[
