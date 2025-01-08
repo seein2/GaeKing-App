@@ -1,5 +1,5 @@
 import React, { useMemo, forwardRef, useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Switch, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Switch, Platform, Alert } from 'react-native';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { AntDesign } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -71,6 +71,7 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
             }
         };
 
+        // 시간 확인 처리
         const handleTimeConfirm = (date: Date) => {
             setShowTimePicker(false);
 
@@ -83,14 +84,33 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
                 const newTimes = [...times];
                 newTimes[currentEditingTimeIndex] = newTime;
                 setTimes(newTimes);
+
+                // 아직 설정해야 할 시간이 남아있다면 자동으로 다음 시간 선택
+                const maxSlots = getMaxTimeSlots();
+                if (newTimes.length < maxSlots) {
+                    setTimeout(() => {
+                        setCurrentEditingTimeIndex(newTimes.length);
+                        setShowTimePicker(true);
+                    }, 500);
+                }
             }
         };
 
+        // 하루 반복 횟수 변경 처리
         const handleRepeatCountChange = (newCount: number) => {
             if (newCount < 1 || newCount > 5) return;
             setRepeatCount(newCount);
-            if (newCount < times.length) {
-                setTimes(times.slice(0, newCount));
+
+            // 기존 시간 배열 조정
+            if (enableTimeSelection) {
+                if (newCount < times.length) {
+                    // 횟수가 줄어들면 마지막 시간들 삭제
+                    setTimes(times.slice(0, newCount));
+                } else if (newCount > times.length) {
+                    // 횟수가 늘어나면 자동으로 시간 선택 모달 표시
+                    setCurrentEditingTimeIndex(times.length);
+                    setShowTimePicker(true);
+                }
             }
         };
 
@@ -98,18 +118,27 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
             setTimes(times.filter((_, i) => i !== index));
         };
 
+        // 시간 설정 토글 처리
         const handleEnableTimeSelection = (value: boolean) => {
             setEnableTimeSelection(value);
             if (!value) {
                 setTimes([]);
                 setNotification('none');
+            } else {
+                // 시간 설정이 켜지면 자동으로 첫 번째 시간 선택
+                setCurrentEditingTimeIndex(0);
+                setShowTimePicker(true);
             }
         };
-
+        // 제출 처리
         const handleSubmit = () => {
             const maxSlots = getMaxTimeSlots();
             if (enableTimeSelection && times.length !== maxSlots) {
-                // TODO: 에러 메시지 표시
+                Alert.alert(
+                    "시간 설정 필요",
+                    `모든 시간을 설정해주세요. (${times.length}/${maxSlots}회 설정됨)`,
+                    [{ text: "확인" }]
+                );
                 return;
             }
 
@@ -119,7 +148,7 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
                     type: repeat,
                     ...(repeat === 'daily' && { count: repeatCount }),
                 },
-                times,
+                times: enableTimeSelection ? times : [],  // 시간 설정이 꺼져있으면 빈 배열
                 notification: {
                     enabled: notification !== 'none' && enableTimeSelection,
                     minutes: parseInt(notification, 10) || 0,
