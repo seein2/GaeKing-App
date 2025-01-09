@@ -117,6 +117,24 @@ const dog = {
             throw error;
         }
     },
+
+    createInvitation: async (dog_id: number) => {
+        try {
+            const response = await api.post(`/dog/${dog_id}/invitation`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    joinByInvitation: async (code: string) => {
+        try {
+            const response = await api.post(`/dog/invitation/${code}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 export default dog;
