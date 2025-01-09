@@ -1,20 +1,44 @@
-import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import dogService from '@/service/dog';
 import DogInfoSection from '@/components/DogInfo';
 import DogOrgChart from '@/components/DogOrgChart';
 import { useDog } from '@/context/dogContext';
+import * as Clipboard from 'expo-clipboard';
 
 export default function DogDetail() {
     const { id } = useLocalSearchParams<{ id: string }>();
     const router = useRouter();
     const { dogs, setDogs } = useDog();
     const [dogProfile, setDogProfile] = useState<DogProfile | null>(null);
+    const [invitationCode, setInvitationCode] = useState<string | null>(null);
 
     useEffect(() => {
         loadDog();
     }, [id]);
+
+    // 초대코드 생성
+    const handleInvite = async () => {
+        try {
+            const response = await dogService.createInvitation(Number(id));
+            if (response.success) {
+                setInvitationCode(response.result.code);
+            }
+        } catch (error) {
+            Alert.alert("오류", "초대 코드 생성에 실패했습니다.");
+        }
+    };
+
+    // 복사 함수 추가
+    const copyToClipboard = async () => {
+        try {
+            await Clipboard.setStringAsync(invitationCode!);
+            Alert.alert("복사 완료", "초대 코드가 클립보드에 복사되었습니다.");
+        } catch (error) {
+            Alert.alert("오류", "복사에 실패했습니다.");
+        }
+    };
 
     const loadDog = async () => {
         try {
@@ -90,6 +114,26 @@ export default function DogDetail() {
                     dog={dog}
                     familyMembers={familyMembers}
                 />
+                {invitationCode ? (
+                    <View style={styles.codeContainer}>
+                        <Text style={styles.codeLabel}>초대 코드 (3분 동안 유효)</Text>
+                        <Text style={styles.codeText}>{invitationCode}</Text>
+                        <TouchableOpacity
+                            style={styles.copyButton}
+                            onPress={copyToClipboard}
+                        >
+                            <Text style={styles.copyButtonText}>복사하기</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.codeInstruction}>이 코드를 가족 구성원에게 공유하세요</Text>
+                    </View>
+                ) : (
+                    <TouchableOpacity
+                        style={styles.inviteButton}
+                        onPress={handleInvite}
+                    >
+                        <Text style={styles.inviteButtonText}>가족 구성원 초대하기</Text>
+                    </TouchableOpacity>
+                )}
             </ScrollView>
         </View>
     );
@@ -99,5 +143,53 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
+    },
+    inviteButton: {
+        backgroundColor: '#007AFF',
+        padding: 15,
+        borderRadius: 8,
+        margin: 16,
+        alignItems: 'center',
+    },
+    inviteButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    codeContainer: {
+        margin: 16,
+        padding: 20,
+        backgroundColor: '#F0F0F0',
+        borderRadius: 8,
+        alignItems: 'center',
+    },
+    codeLabel: {
+        fontSize: 14,
+        color: '#666',
+        marginBottom: 8,
+    },
+    codeText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: '#000',
+        letterSpacing: 2,
+        marginVertical: 8,
+    },
+    codeInstruction: {
+        fontSize: 14,
+        color: '#666',
+        marginTop: 8,
+    },
+    copyButton: {
+        backgroundColor: '#007AFF',
+        paddingVertical: 8,
+        paddingHorizontal: 16,
+        borderRadius: 6,
+        marginTop: 12,
+    },
+    copyButtonText: {
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: '500',
     },
 });
