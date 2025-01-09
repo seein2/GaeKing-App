@@ -1,7 +1,7 @@
-import { View, Text, TouchableOpacity, Image, StyleSheet, FlatList, ListRenderItem, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, FlatList, ListRenderItem, Alert, Animated } from 'react-native';
 import { useRouter } from 'expo-router';
 import dogService from '@/service/dog';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { useDog } from '@/context/dogContext';
 
@@ -60,7 +60,105 @@ export default function Index() {
                 </TouchableOpacity>
             </View>
         );
-    }
+    };
+    const SpeedDialButton = () => {
+        const [isOpen, setIsOpen] = useState(false);
+        const animation = useRef(new Animated.Value(0)).current;
+        const router = useRouter();
+
+        const toggleMenu = () => {
+            const toValue = isOpen ? 0 : 1;
+            Animated.spring(animation, {
+                toValue,
+                friction: 5,
+                useNativeDriver: true,
+            }).start();
+            setIsOpen(!isOpen);
+        };
+
+        const registerOptionStyle = {
+            transform: [
+                { scale: animation },
+                {
+                    translateY: animation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, -120]
+                    })
+                }
+            ],
+            opacity: animation
+        };
+
+        const codeOptionStyle = {
+            transform: [
+                { scale: animation },
+                {
+                    translateY: animation.interpolate({
+                        inputRange: [0, 1],
+                        outputRange: [0, -170]
+                    })
+                }
+            ],
+            opacity: animation
+        };
+
+        return (
+            <View style={styles.speedDial}>
+                {/* 직접 등록 옵션 */}
+                <Animated.View style={[styles.speedDialOption, registerOptionStyle]}>
+                    <TouchableOpacity
+                        style={styles.optionContainer}
+                        onPress={() => {
+                            router.push('/dogs/register');
+                            toggleMenu();
+                        }}
+                    >
+                        <View style={[styles.fabOption, { backgroundColor: '#4CAF50' }]}>
+                            <AntDesign name="form" size={20} color="white" />
+                        </View>
+                        <Text style={styles.optionLabel}>직접 등록</Text>
+                    </TouchableOpacity>
+                </Animated.View>
+
+                {/* 코드로 등록 옵션 */}
+                <Animated.View style={[styles.speedDialOption, codeOptionStyle]}>
+                    <TouchableOpacity
+                        style={styles.optionContainer}
+                        onPress={() => {
+                            router.push('/dogs/register-code');
+                            toggleMenu();
+                        }}
+                    >
+                        <View style={[styles.fabOption, { backgroundColor: '#2196F3' }]}>
+                            <AntDesign name="idcard" size={20} color="white" />
+                        </View>
+                        <Text style={styles.optionLabel}>코드로 등록</Text>
+                    </TouchableOpacity>
+                </Animated.View>
+
+                {/* 메인 FAB 버튼 */}
+                <TouchableOpacity
+                    style={[styles.fab, isOpen && styles.fabActive]}
+                    onPress={toggleMenu}
+                >
+                    <Animated.View
+                        style={{
+                            transform: [
+                                {
+                                    rotate: animation.interpolate({
+                                        inputRange: [0, 1],
+                                        outputRange: ['0deg', '45deg']
+                                    })
+                                }
+                            ]
+                        }}
+                    >
+                        <AntDesign name="plus" size={24} color="white" />
+                    </Animated.View>
+                </TouchableOpacity>
+            </View>
+        );
+    };
 
     return (
         <View style={styles.container}>
@@ -70,12 +168,7 @@ export default function Index() {
                 keyExtractor={item => item.dog_id.toString()}
                 contentContainerStyle={styles.listContainer}
             />
-            <TouchableOpacity
-                style={styles.fab}
-                onPress={() => router.push('/dogs/register')}
-            >
-                <AntDesign name="plus" size={24} color="white" />
-            </TouchableOpacity>
+            <SpeedDialButton />
         </View>
     );
 }
@@ -148,5 +241,51 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 5,
+    },
+    speedDial: {
+        position: 'absolute',
+        right: 20,
+        bottom: 20,
+        alignItems: 'center',
+    },
+    speedDialOption: {
+        position: 'absolute',
+        right: 0,
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingRight: 10,
+    },
+    optionLabel: {
+        color: '#666',
+        marginRight: 10,
+        backgroundColor: 'white',
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 4,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.2,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+    fabOption: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 5,
+        elevation: 5,
+    },
+    fabActive: {
+        backgroundColor: '#ff4444',
+    },
+    optionContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingRight: 10,
     },
 });
