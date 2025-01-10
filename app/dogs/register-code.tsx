@@ -22,6 +22,7 @@ export default function JoinDog() {
             ]);
         } catch (error) {
             Alert.alert('오류', '초대 코드가 유효하지 않거나 만료되었습니다.');
+            console.log(error);
         } finally {
             setIsLoading(false);
         }
