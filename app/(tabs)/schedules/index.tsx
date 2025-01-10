@@ -3,7 +3,7 @@ import { View, StyleSheet, Keyboard, TouchableWithoutFeedback, ScrollView, Touch
 import { CustomCalendar } from '@/components/CustomCalendar';
 import { ScheduleCreationFlow } from '@/components/schedule/BottomSheet';
 import scheduleService from '@/service/schedule';
-import { router, usePathname } from 'expo-router';
+import { router } from 'expo-router';
 
 const SCHEDULE_TYPE_META = {
   '식사': {
