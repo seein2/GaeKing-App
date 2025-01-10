@@ -24,24 +24,37 @@ export default function Index() {
     }, []);
 
     const renderDogItem: ListRenderItem<Dog> = ({ item }) => (
-        <TouchableOpacity
-            style={styles.dogCard}
-            onPress={() => router.push(`/dogs/${item.dog_id}`)}
-        >
-            <Image
-                source={
-                    item.profile_image
-                        ? { uri: dogService.getProfileImageUrl(item.profile_image) }
-                        : PlaceholderImage
-                }
-                style={styles.dogImage}
-            />
-            <View style={styles.dogInfo}>
-                <Text style={styles.dogName}>{item.dog_name}</Text>
-                <Text style={styles.dogBreed}>{item.breed_type}</Text>
+        <View style={styles.dogContainer}>
+            {/* 강아지 프로필 헤더 */}
+            <TouchableOpacity
+                style={styles.profileHeader}
+                onPress={() => router.push(`/dogs/${item.dog_id}`)}
+            >
+                <View style={styles.profileLeft}>
+                    <Image
+                        source={
+                            item.profile_image
+                                ? { uri: dogService.getProfileImageUrl(item.profile_image) }
+                                : PlaceholderImage
+                        }
+                        style={styles.profileImage}
+                    />
+                    <Text style={styles.dogName}>{item.dog_name}</Text>
+                </View>
+                <AntDesign name="right" size={20} color="#666" />
+            </TouchableOpacity>
+
+            {/* 위젯 영역 */}
+            <View style={styles.widgetArea}>
+                <TouchableOpacity
+                    style={styles.addWidgetButton}
+                    // onPress={() => {router.push(`/widgets/add/${item.dog_id}`)}
+                >
+                    <AntDesign name="plus" size={20} color="#666" />
+                    <Text style={styles.addWidgetText}>위젯 추가</Text>
+                </TouchableOpacity>
             </View>
-            <AntDesign name="right" size={20} color="#666" />
-        </TouchableOpacity>
+        </View>
     );
 
     if (dogs.length === 0) {
@@ -287,5 +300,41 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         paddingRight: 10,
+    },
+    // 기존 styles에 추가
+    dogContainer: {
+        backgroundColor: '#f8f3e8',
+        borderRadius: 16,
+        marginBottom: 16,
+        padding: 16,
+    },
+    profileHeader: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+    profileLeft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    profileImage: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        backgroundColor: '#e6dcc6',
+    },
+    widgetArea: {
+        marginTop: 16,
+    },
+    addWidgetButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 16,
+        gap: 8,
+    },
+    addWidgetText: {
+        color: '#666',
+        fontSize: 16,
     },
 });
