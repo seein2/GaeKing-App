@@ -48,7 +48,7 @@ export default function Index() {
             <View style={styles.widgetArea}>
                 <TouchableOpacity
                     style={styles.addWidgetButton}
-                    // onPress={() => {router.push(`/widgets/add/${item.dog_id}`)}
+                    onPress={() => {router.push(`/widgets/${item.dog_id}`)}}
                 >
                     <AntDesign name="plus" size={20} color="#666" />
                     <Text style={styles.addWidgetText}>위젯 추가</Text>
