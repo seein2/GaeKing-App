@@ -81,39 +81,34 @@ interface ScheduleCompletionUpdate {
 
 // UI에서 사용할 스케줄 타입별 메타데이터
 const SCHEDULE_TYPE_META = {
-  [SCHEDULE_TYPES.MEAL]: {
+  '식사': {
+    color: '#FF9F1C',  // 주황색
     title: '식사',
-    icon: '🍽️',
-    color: '#FF6B6B',
-    defaultDescription: '사료 급여'
+    icon: '🍽️'
   },
-  [SCHEDULE_TYPES.WALK]: {
+  '산책': {
+    color: '#2EC4B6',  // 청록색
     title: '산책',
-    icon: '🦮',
-    color: '#4ECDC4',
-    defaultDescription: '산책'
+    icon: '🦮'
   },
-  [SCHEDULE_TYPES.SNACK]: {
+  '간식': {
+    color: '#E71D36',  // 빨간색
     title: '간식',
-    icon: '🦴',
-    color: '#FFD93D',
-    defaultDescription: '간식 급여'
+    icon: '🦴'
   },
-  [SCHEDULE_TYPES.BATH]: {
+  '목욕': {
+    color: '#011627',  // 남색
     title: '목욕',
-    icon: '🛁',
-    color: '#6C5CE7',
-    defaultDescription: '목욕'
+    icon: '🛁'
   },
-  [SCHEDULE_TYPES.HOSPITAL]: {
+  '병원': {
+    color: '#FF3366',  // 분홍색
     title: '병원',
-    icon: '🏥',
-    color: '#A8E6CF',
-    defaultDescription: '병원 방문'
+    icon: '🏥'
   },
-  [SCHEDULE_TYPES.OTHER]: {
+  '기타': {
+    color: '#666666',  // 회색
     title: '기타',
-    icon: '📝',
-    color: '#95A5A6'
+    icon: '📝'
   }
 } as const;
