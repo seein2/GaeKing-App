@@ -12,6 +12,7 @@ export function RefreshableFlatList<T>({
     ...props
 }: RefreshableFlatListProps<T>) {
     const [refreshing, setRefreshing] = useState(false);
+    const [isFirstLoad, setIsFirstLoad] = useState(true);
 
     // Pull-to-refresh 처리
     const handleRefresh = useCallback(async () => {
@@ -25,11 +26,14 @@ export function RefreshableFlatList<T>({
         }
     }, [onRefresh]);
 
-    // 화면 포커스시 자동 새로고침
+    // 화면 첫 포커스시에만 자동 새로고침
     useFocusEffect(
         useCallback(() => {
-            onRefresh();
-        }, [onRefresh])
+            if (isFirstLoad) {
+                onRefresh();
+                setIsFirstLoad(false);
+            }
+        }, [isFirstLoad, onRefresh])
     );
 
     return (
