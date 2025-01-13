@@ -4,23 +4,46 @@ import dogService from '@/service/dog';
 import { useEffect, useRef, useState } from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { useDog } from '@/context/dogContext';
+import { Widget } from '@/components/widget/Widget';
+import widgetService from '@/service/widget';
+import { RefreshableFlatList } from '@/components/Refresh';
 
 const PlaceholderImage = require('@/assets/images/dog/profile.png');
 
 export default function Index() {
     const router = useRouter();
     const { dogs, setDogs } = useDog();
+    const [dogWidgets, setDogWidgets] = useState<DogWidgets>({});
 
-    // 강아지 목록 불러오기
-    const loadDogs = async () => {
+    const loadData = async () => {
+        await loadDogsAndWidgets();
+    };
+
+    // 강아지 목록과 위젯 설정 불러오기
+    const loadDogsAndWidgets = async () => {
         const response = await dogService.list();
         if (response.success && response.result) {
-            setDogs(Array.isArray(response.result) ? response.result : [response.result]);
+            const dogList = Array.isArray(response.result) ? response.result : [response.result];
+            setDogs(dogList);
+
+            // 각 강아지의 위젯 정보 불러오기
+            const widgetSettings: DogWidgets = {};
+            for (const dog of dogList) {
+                try {
+                    const widgetResponse = await widgetService.getActiveWidgets(dog.dog_id);
+                    if (widgetResponse.success && widgetResponse.result) {
+                        widgetSettings[dog.dog_id] = widgetResponse.result;
+                    }
+                } catch (error) {
+                    console.error(`Failed to load widgets for dog ${dog.dog_id}:`, error);
+                }
+            }
+            setDogWidgets(widgetSettings);
         }
     };
 
     useEffect(() => {
-        loadDogs();
+        loadDogsAndWidgets();
     }, []);
 
     const renderDogItem: ListRenderItem<Dog> = ({ item }) => (
@@ -46,9 +69,23 @@ export default function Index() {
 
             {/* 위젯 영역 */}
             <View style={styles.widgetArea}>
+                {dogWidgets[item.dog_id]?.length > 0 ? (
+                    <View style={styles.widgetGrid}>
+                        {dogWidgets[item.dog_id].map((widgetData) => (
+                            <Widget
+                                key={widgetData.widget_type}  // key prop으로는 widget_type을 사용
+                                type={widgetData.widget_type} // type prop으로도 widget_type을 전달
+                                data={widgetData}  // 전체 데이터는 별도 prop으로 전달
+                                onPress={() => {
+                                    console.log(`${widgetData.widget_type} widget pressed for dog ${item.dog_id}`);
+                                }}
+                            />
+                        ))}
+                    </View>
+                ) : null}
                 <TouchableOpacity
                     style={styles.addWidgetButton}
-                    onPress={() => {router.push(`/widgets/${item.dog_id}`)}}
+                    onPress={() => router.push(`/widgets/${item.dog_id}`)}
                 >
                     <AntDesign name="plus" size={20} color="#666" />
                     <Text style={styles.addWidgetText}>위젯 추가</Text>
@@ -175,11 +212,12 @@ export default function Index() {
 
     return (
         <View style={styles.container}>
-            <FlatList
+            <RefreshableFlatList
                 data={dogs}
                 renderItem={renderDogItem}
                 keyExtractor={item => item.dog_id.toString()}
                 contentContainerStyle={styles.listContainer}
+                onRefresh={loadData}
             />
             <SpeedDialButton />
         </View>
@@ -337,4 +375,11 @@ const styles = StyleSheet.create({
         color: '#666',
         fontSize: 16,
     },
+    widgetGrid: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 12,
+        padding: 16,
+    },
+
 });
