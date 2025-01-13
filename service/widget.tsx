@@ -17,6 +17,14 @@ const widget = {
             throw error;
         }
     },
+    getActiveWidgets: async (dog_id: Number): Promise<ActiveWidgetsResponse> => {
+        try {
+            const response = await api.get(`/widget/active/${dog_id}`);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    },
 };
 
 export default widget;
