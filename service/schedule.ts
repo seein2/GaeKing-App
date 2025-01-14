@@ -54,9 +54,8 @@ const schedule = {
     updateCompletion: async (completionData: ScheduleCompletionUpdate): Promise<ScheduleResponse> => {
         try {
             const response = await api.patch(
-                `/schedule/${completionData.schedule_id}/completion`,
+                `/schedule/${completionData.schedule_id}/${completionData.instance_id}`,
                 {
-                    completion_time: completionData.completion_time,
                     is_completed: completionData.is_completed
                 }
             );
