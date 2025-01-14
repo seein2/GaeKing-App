@@ -53,6 +53,7 @@ interface ScheduleDetail {
   schedule_type: keyof typeof SCHEDULE_TYPE_META;
   description: string | null;
   repeat_type: string | null;
+  repeat_count: number;
   notification: {
     enabled: boolean;
     minutes: number | null;
@@ -74,9 +75,10 @@ interface ScheduleResponse {
 
 // 스케줄 완료 상태 업데이트 요청 인터페이스
 interface ScheduleCompletionUpdate {
-  schedule_id: number;
-  completion_time: string;  // ISO 8601 형식
-  is_completed: boolean;
+    schedule_id: number;
+    instance_id: number;
+    is_completed: boolean;
+    completion_time: string | null;
 };
 
 // UI에서 사용할 스케줄 타입별 메타데이터
