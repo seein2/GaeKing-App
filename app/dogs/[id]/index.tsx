@@ -2,8 +2,8 @@ import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'rea
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import dogService from '@/service/dog';
-import DogInfoSection from '@/components/DogInfo';
-import DogOrgChart from '@/components/DogOrgChart';
+import DogInfoSection from '@/components/dog/DogInfo';
+import DogOrgChart from '@/components/dog/DogOrgChart';
 import { useDog } from '@/context/dogContext';
 import * as Clipboard from 'expo-clipboard';
 

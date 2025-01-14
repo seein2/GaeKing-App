@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import dogService from '@/service/dog';
 import React from 'react';
 import { useDog } from '@/context/dogContext';
-import DogForm, { DogFormData } from '@/components/DogForm';
+import DogForm, { DogFormData } from '@/components/dog/DogForm';
 import * as ImagePicker from 'expo-image-picker';
 
 export default function EditDog() {

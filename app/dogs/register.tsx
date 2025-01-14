@@ -3,7 +3,7 @@ import { useRouter, Stack } from 'expo-router';
 import dog from '@/service/dog';
 import { useDog } from '@/context/dogContext';
 import React from 'react';
-import DogForm, { DogFormData } from '@/components/DogForm';
+import DogForm, { DogFormData } from '@/components/dog/DogForm';
 
 
 
