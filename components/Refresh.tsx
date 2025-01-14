@@ -1,4 +1,3 @@
-// components/common/RefreshableFlatList.tsx
 import React, { useState, useCallback } from 'react';
 import { FlatList, FlatListProps, RefreshControl } from 'react-native';
 import { useFocusEffect } from 'expo-router';
