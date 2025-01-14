@@ -9,15 +9,29 @@ const WIDGET_ICONS = {
     '병원': '🏥'
 } as const;  // as const를 추가하여 타입을 더 정확하게 만듦
 
-export const Widget = ({ type, onPress }: WidgetProps) => (
-    <TouchableOpacity
-        style={styles.widget}
-        onPress={onPress}
-    >
-        <Text style={styles.widgetIcon}>{WIDGET_ICONS[type]}</Text>
-        <Text style={styles.widgetTitle}>{type}</Text>
-    </TouchableOpacity>
-);
+export const Widget = ({ type, data, onPress }: WidgetProps) => {
+    const renderStatus = () => {
+        if (!data) return null;
+
+        if (type === '생일') {
+            return <Text style={styles.status}>{data.birth_date}</Text>;
+        }
+
+        return (
+            <Text style={styles.status}>
+                {data.completed_count}/{data.today_count}
+            </Text>
+        );
+    };
+
+    return (
+        <TouchableOpacity style={styles.widget} onPress={onPress}>
+            <Text style={styles.widgetIcon}>{WIDGET_ICONS[type]}</Text>
+            <Text style={styles.widgetTitle}>{type}</Text>
+            {renderStatus()}
+        </TouchableOpacity>
+    );
+};
 
 const styles = StyleSheet.create({
     widget: {
@@ -31,6 +45,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 2,
         elevation: 2,
+        height: 100,
     },
     widgetIcon: {
         fontSize: 24,
@@ -40,6 +55,11 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: '#333',
         textAlign: 'center',
+    },
+    status: {
+        fontSize: 12,
+        color: '#666',
+        marginTop: 4,
     },
 });
 
