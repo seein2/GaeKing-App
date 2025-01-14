@@ -71,15 +71,27 @@ export default function ScheduleDetail() {
         }
     };
 
-    // const handleToggleComplete = async (instanceId: number) => {
-    //     try {
-    //         // TODO: toggle API 구현 필요
-    //         await scheduleService.toggleComplete(instanceId);
-    //         loadScheduleDetail(); // 상태 갱신을 위해 다시 로드
-    //     } catch (error) {
-    //         Alert.alert("오류", "상태 변경에 실패했습니다.");
-    //     }
-    // };
+    const handleToggleComplete = async (instanceId: number) => {
+        try {
+            const instance = scheduleDetail?.instances.find(i => i.instance_id === instanceId);
+            if (!instance) return;
+
+            const response = await scheduleService.updateCompletion({
+                schedule_id: Number(id),
+                instance_id: instanceId,
+                is_completed: !instance.is_completed,
+                completion_time: !instance.is_completed ? new Date().toISOString() : null
+            });
+
+            if (response.success) {
+                loadScheduleDetail(); // 상태 갱신을 위해 다시 로드
+            } else {
+                Alert.alert("오류", "상태 변경에 실패했습니다.");
+            }
+        } catch (error) {
+            Alert.alert("오류", "상태 변경 중 문제가 발생했습니다.");
+        }
+    };
 
     const handleDelete = () => {
         Alert.alert(
@@ -92,7 +104,6 @@ export default function ScheduleDetail() {
                     style: "destructive",
                     onPress: async () => {
                         try {
-                            // TODO: delete API 구현 필요
                             const response = await scheduleService.delete(Number(id));
                             if (response.success) {
                                 Alert.alert("성공", "스케줄이 삭제되었습니다.");
@@ -158,7 +169,7 @@ export default function ScheduleDetail() {
                     <Text style={styles.sectionTitle}>반복 설정</Text>
                     <Text style={styles.repeatInfo}>
                         {scheduleDetail.repeat_type === 'none' ? '반복 없음' :
-                            scheduleDetail.repeat_type === 'daily' ? `매일 ${scheduleDetail.repeat_type}회` :
+                            scheduleDetail.repeat_type === 'daily' ? `매일 ${scheduleDetail.repeat_count}회` :
                                 scheduleDetail.repeat_type === 'weekly' ? '매주' : '매월'}
                     </Text>
                 </View>
@@ -180,7 +191,7 @@ export default function ScheduleDetail() {
                         <TouchableOpacity
                             key={instance.instance_id}
                             style={styles.instanceItem}
-                        // onPress={() => handleToggleComplete(instance.instance_id)}
+                            onPress={() => handleToggleComplete(instance.instance_id)}
                         >
                             <View style={styles.instanceInfo}>
                                 <Text style={styles.instanceTime}>
