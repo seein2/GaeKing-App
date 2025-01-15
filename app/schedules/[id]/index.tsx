@@ -3,7 +3,6 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import scheduleService from '@/service/schedule';
 
-// 파일 상단의 import문 아래에 추가
 const SCHEDULE_TYPES = {
     MEAL: '식사',
     WALK: '산책',
