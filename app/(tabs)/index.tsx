@@ -6,7 +6,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { useDog } from '@/context/dogContext';
 import { Widget } from '@/components/widget/Widget';
 import widgetService from '@/service/widget';
-import { RefreshableFlatList } from '@/components/Refresh';
+import { RefreshableFlatList } from '@/components/refresh/Refresh';
 
 const PlaceholderImage = require('@/assets/images/dog/profile.png');
 
