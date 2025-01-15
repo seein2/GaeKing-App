@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
+import { useCallback, useState } from 'react';
 import dogService from '@/service/dog';
 import DogInfoSection from '@/components/dog/DogInfo';
 import DogOrgChart from '@/components/dog/DogOrgChart';
@@ -14,11 +14,24 @@ export default function DogDetail() {
     const [dogProfile, setDogProfile] = useState<DogProfile | null>(null);
     const [invitationCode, setInvitationCode] = useState<string | null>(null);
 
-    useEffect(() => {
-        loadDog();
-    }, [id]);
+    const loadDog = async () => {
+        try {
+            const response = await dogService.info(Number(id));
+            if (response.success) {
+                setDogProfile(response);
+            }
+        } catch (error) {
+            console.error('강아지 정보 로딩 실패:', error);
+        }
+    };
 
-    // 초대코드 생성
+    // 화면이 포커스될 때마다 데이터 새로고침
+    useFocusEffect(
+        useCallback(() => {
+            loadDog();
+        }, [id])
+    );
+
     const handleInvite = async () => {
         try {
             const response = await dogService.createInvitation(Number(id));
@@ -30,24 +43,12 @@ export default function DogDetail() {
         }
     };
 
-    // 복사 함수 추가
     const copyToClipboard = async () => {
         try {
             await Clipboard.setStringAsync(invitationCode!);
             Alert.alert("복사 완료", "초대 코드가 클립보드에 복사되었습니다.");
         } catch (error) {
             Alert.alert("오류", "복사에 실패했습니다.");
-        }
-    };
-
-    const loadDog = async () => {
-        try {
-            const response = await dogService.info(Number(id));
-            if (response.success) {
-                setDogProfile(response);
-            }
-        } catch (error) {
-            console.error('강아지 정보 로딩 실패:', error);
         }
     };
 
@@ -64,10 +65,8 @@ export default function DogDetail() {
                         try {
                             const response = await dogService.delete(Number(id));
                             if (response.success) {
-                                // 삭제된 강아지를 Context에서도 제거
                                 const updatedDogs = dogs.filter(dog => dog.dog_id !== Number(id));
                                 await setDogs(updatedDogs);
-
                                 Alert.alert("성공", "강아지가 삭제되었습니다.");
                                 router.back();
                             }
