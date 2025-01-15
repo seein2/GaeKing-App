@@ -1,4 +1,3 @@
-// components/dogs/DogInfoSection.tsx
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
