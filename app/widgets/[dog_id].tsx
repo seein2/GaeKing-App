@@ -103,7 +103,7 @@ export default function WidgetSelector() {
             }), {});
 
             await widgetService.updateSettings(dogId, { widget_types: widgetTypes });
-            router.back();
+            router.push(`/(tabs)`);
         } catch (error) {
             console.error('Failed to save widget settings:', error);
         } finally {
