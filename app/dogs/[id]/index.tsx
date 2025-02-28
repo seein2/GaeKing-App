@@ -141,14 +141,17 @@ export default function DogDetail() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#E3DFD5',
+        padding: 16,
     },
     inviteButton: {
-        backgroundColor: '#007AFF',
+        backgroundColor: '#7A6836',
+        width: '65%',
         padding: 15,
-        borderRadius: 8,
+        borderRadius: 10,
         margin: 16,
         alignItems: 'center',
+        alignSelf: 'center',
     },
     inviteButtonText: {
         color: '#fff',
@@ -158,29 +161,29 @@ const styles = StyleSheet.create({
     codeContainer: {
         margin: 16,
         padding: 20,
-        backgroundColor: '#F0F0F0',
-        borderRadius: 8,
+        backgroundColor: '#fff',
+        borderRadius: 12,
         alignItems: 'center',
     },
     codeLabel: {
         fontSize: 14,
-        color: '#666',
+        color: '#7A6836',
         marginBottom: 8,
     },
     codeText: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#000',
+        color: '#7A6836',
         letterSpacing: 2,
         marginVertical: 8,
     },
     codeInstruction: {
         fontSize: 14,
-        color: '#666',
+        color: '#7A683680',
         marginTop: 8,
     },
     copyButton: {
-        backgroundColor: '#007AFF',
+        backgroundColor: '#7A6836',
         paddingVertical: 8,
         paddingHorizontal: 16,
         borderRadius: 6,

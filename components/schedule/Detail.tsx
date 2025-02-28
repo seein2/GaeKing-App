@@ -157,7 +157,17 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
         };
 
         return (
-            <BottomSheet ref={ref} index={0} snapPoints={snapPoints} enablePanDownToClose={false}>
+            <BottomSheet
+            ref={ref}
+            index={0}
+            snapPoints={snapPoints}
+            enablePanDownToClose={false}
+            handleComponent={() => (
+                <View style={styles.header1}>
+                    <View style={styles.handle} />
+                </View>
+            )}
+        >
                 <View style={styles.container}>
                     <View style={styles.header}>
                         <TouchableOpacity onPress={onBack} style={styles.headerButton}>
@@ -236,8 +246,9 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
                                 <Switch
                                     value={enableTimeSelection}
                                     onValueChange={handleEnableTimeSelection}
-                                    ios_backgroundColor="#f8f9fa"
-                                    trackColor={{ false: '#f8f9fa', true: '#007AFF' }}
+                                    ios_backgroundColor="#7A683636"
+                                    trackColor={{ false: '#7A683636', true: '#7A6836' }}
+                                    thumbColor={enableTimeSelection ? '#7A683636' : '#7A6836'}
                                 />
                             </View>
 
@@ -379,7 +390,7 @@ export const DetailsFormSheet = forwardRef<BottomSheet, DetailsFormSheetProps>(
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#EFEBDC',
     },
     header: {
         flexDirection: 'row',
@@ -389,6 +400,20 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         borderBottomWidth: 1,
         borderBottomColor: '#eee',
+        backgroundColor: '#EFEBDC',
+    },
+    header1: {
+        backgroundColor: '#EFEBDC',
+        paddingVertical: 12,
+        borderTopLeftRadius: 15,
+        borderTopRightRadius: 15,
+        alignItems: 'center',
+    },
+    handle: {
+        width: 40,
+        height: 4,
+        borderRadius: 2,
+        backgroundColor: '#7A6836',
     },
     headerButton: {
         padding: 8,
@@ -396,7 +421,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: '#333',
+        color: '#584C2D',
     },
     scrollContent: {
         padding: 16,
@@ -407,7 +432,7 @@ const styles = StyleSheet.create({
     sectionTitle: {
         fontSize: 16,
         fontWeight: '600',
-        color: '#333',
+        color: '#705817',
         marginBottom: 12,
     },
     subSection: {
@@ -423,7 +448,7 @@ const styles = StyleSheet.create({
         marginBottom: 8,
     },
     descriptionInput: {
-        backgroundColor: '#f8f9fa',
+        backgroundColor: '#7A683636',
         borderRadius: 12,
         padding: 12,
         height: 100,
@@ -438,10 +463,10 @@ const styles = StyleSheet.create({
         paddingVertical: 8,
         paddingHorizontal: 16,
         borderRadius: 20,
-        backgroundColor: '#f8f9fa',
+        backgroundColor: '#7A683636',
     },
     selectedOption: {
-        backgroundColor: '#007AFF',
+        backgroundColor: '#7A68368A',
     },
     disabledOption: {
         backgroundColor: '#e9ecef',
@@ -449,7 +474,7 @@ const styles = StyleSheet.create({
     },
     optionText: {
         fontSize: 14,
-        color: '#666',
+        color: '#7A68369C',
     },
     selectedOptionText: {
         color: 'white',
@@ -490,13 +515,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         gap: 8,
+        color: '#7A6836',
     },
     timeItemContainer: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     timeItem: {
-        backgroundColor: '#e9ecef',
+        backgroundColor: '#7A683636',
         paddingVertical: 8,
         paddingHorizontal: 16,
         borderRadius: 20,
@@ -518,7 +544,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     submitButton: {
-        backgroundColor: '#007AFF',
+        backgroundColor: '#7A6836',
         padding: 16,
         borderRadius: 12,
         alignItems: 'center',

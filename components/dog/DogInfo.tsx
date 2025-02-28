@@ -57,7 +57,17 @@ export default function DogInfoSection({
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20,
+        padding: 16,
+        marginHorizontal: 20,
+        backgroundColor: 'white',
+        borderRadius: 12,
+        borderWidth: 1,
+        borderColor: '#957C38',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        elevation: 3,
+        marginBottom: 16,
     },
     infoSection: {
         marginBottom: 20,
@@ -88,14 +98,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 8,
         paddingHorizontal: 16,
-        borderRadius: 8,
+        borderRadius: 10,
         gap: 8,
     },
     editButton: {
-        backgroundColor: '#007AFF',
+        backgroundColor: '#7A6836',
     },
     deleteButton: {
-        backgroundColor: '#FF3B30',
+        backgroundColor: '#CD6750',
     },
     buttonText: {
         color: 'white',

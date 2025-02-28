@@ -138,8 +138,8 @@ export default function WidgetSelector() {
                         <Switch
                             value={activeWidgets.has(widget.id)}
                             onValueChange={() => toggleWidget(widget.id)}
-                            trackColor={{ false: '#767577', true: '#81b0ff' }}
-                            thumbColor={activeWidgets.has(widget.id) ? '#007AFF' : '#f4f3f4'}
+                            trackColor={{ false: '#767577', true: '#D3C692' }}
+                            thumbColor={activeWidgets.has(widget.id) ? '#7A6836' : '#7A6836'}
                         />
                     </TouchableOpacity>
                 ))}
@@ -178,10 +178,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        backgroundColor: 'white',
+        backgroundColor: '#E0DCCD',
         padding: 16,
         borderRadius: 12,
-        marginBottom: 12,
+        marginBottom: 20,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
         marginTop: 4,
     },
     saveButton: {
-        backgroundColor: '#007AFF',
+        backgroundColor: '#7A6836',
         margin: 16,
         padding: 16,
         borderRadius: 12,

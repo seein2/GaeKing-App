@@ -49,7 +49,7 @@ const TreeNode = ({ member, isRoot = false }: { member: any, isRoot?: boolean })
             ]}
         >
             <LinearGradient
-                colors={isRoot ? ['#FFD700', '#FFA500'] : ['#ffffff', '#f8f9fa']}
+                colors={isRoot ? ['#C4B47D', '#B3A46D'] : ['#D3C692', '#D3C692']}
                 style={[styles.node, isRoot ? styles.rootNode : styles.memberNode]}
             >
                 {isRoot ? (
@@ -63,17 +63,17 @@ const TreeNode = ({ member, isRoot = false }: { member: any, isRoot?: boolean })
                                 }
                                 style={styles.orgChartImage}
                             />
-                            <View style={styles.crownContainer}>
+                            {/* <View style={styles.crownContainer}>
                                 <Text style={styles.crown}>👑</Text>
-                            </View>
+                            </View> */}
                         </View>
                         <Text style={styles.dogName}>{member.dog_name}</Text>
                     </>
                 ) : (
                     <>
-                        <View style={styles.memberIconContainer}>
+                        {/* <View style={styles.memberIconContainer}>
                             <Text style={styles.memberIcon}>👤</Text>
-                        </View>
+                        </View> */}
                         <Text style={styles.memberName}>{member.user_name}</Text>
                     </>
                 )}
@@ -122,7 +122,7 @@ export default function DogOrgChart({ dog, familyMembers }: FamilyOrgChartProps)
 
     return (
         <View style={styles.container}>
-            <Text style={styles.sectionTitle}>{dog.dog_name}제국 조직도</Text>
+            <Text style={styles.sectionTitle}>{dog.dog_name}가족 조직도</Text>
             <View style={styles.treeContainer}>
                 <TreeNode member={treeData} isRoot={true} />
             </View>

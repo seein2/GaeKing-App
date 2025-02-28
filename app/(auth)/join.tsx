@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Keyboard, TouchableWithoutFeedback, Image } from 'react-native';
 import { router } from 'expo-router';
 import AuthInput from '@/components/AuthInput';
 import auth from '@/service/auth';
@@ -42,7 +42,18 @@ export default function Join() {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={styles.container}>
-        <Text style={styles.title}>회원가입</Text>
+        <Image
+          source={require('@/assets/images/dog/profile.png')}
+          style={styles.titleImage}
+        />
+        <Image
+          source={require('@/assets/images/dog/logo.png')}
+          style={[styles.titleImage, {
+            position: 'absolute',
+            left: 40,
+            top: 60,
+          }]}
+        />
         <AuthInput
           value={id}
           onChangeText={setId}
@@ -77,20 +88,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
+    backgroundColor: '#FFFFFF',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+  titleImage: {
+    width: 102,
+    height: 88,
     marginBottom: 20,
+    resizeMode: 'contain'
   },
   button: {
-    backgroundColor: '#007AFF',
-    width: '80%',
+    backgroundColor: '#D3C692',
+    width: 283,
     padding: 15,
     borderRadius: 8,
     marginTop: 20,
   },
   buttonText: {
+    fontSize: 18,
     color: 'white',
     textAlign: 'center',
     fontWeight: 'bold',
@@ -100,7 +114,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   linkText: {
-    color: '#007AFF',
+    color: '#BAB6B6',
     marginTop: 15,
   },
 });

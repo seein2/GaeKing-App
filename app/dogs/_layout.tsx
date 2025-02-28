@@ -5,16 +5,30 @@ export default function Index() {
     <Stack
       screenOptions={{
         headerStyle: {
-          backgroundColor: '#fff',
+          backgroundColor: '#E3DFD5',
         },
-        headerTintColor: '#000',
+        headerTintColor: '#7A6836',
+        headerShadowVisible: false,
       }}
     >
-      <Stack.Screen 
+      <Stack.Screen
         name="register"
         options={{
-          title: '강아지 등록하기',
+          title: 'DOG REGISTER',
           presentation: 'card',
+        }}
+      />
+      <Stack.Screen
+        name="[id]/index"
+        options={{
+          title: 'DOG PROFILE',
+        }}
+      />
+      <Stack.Screen
+        name="register-code"
+        options={{
+          title: '초대 코드로 참여하기',
+          headerTintColor: '#E3DFD5',
         }}
       />
     </Stack>

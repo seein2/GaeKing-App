@@ -97,11 +97,13 @@ export default function Index() {
     if (dogs.length === 0) {
         return (
             <View style={styles.container}>
+                <View style={styles.emptyContent}>
                 <Image
                     source={PlaceholderImage}
                     style={styles.emptyImage}
                 />
                 <Text style={styles.message}>아직 등록된 강아지가 없어요</Text>
+                </View>
                 <TouchableOpacity
                     style={styles.fab}
                     onPress={() => router.push('/dogs/register')}
@@ -227,7 +229,12 @@ export default function Index() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#FFFFFF',
+    },
+    emptyContent: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     listContainer: {
         padding: 16,
@@ -281,7 +288,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 20,
         bottom: 20,
-        backgroundColor: '#007AFF',
+        backgroundColor: '#7A6836',
         width: 56,
         height: 56,
         borderRadius: 28,
@@ -354,12 +361,15 @@ const styles = StyleSheet.create({
     profileLeft: {
         flexDirection: 'row',
         alignItems: 'center',
+        gap: 25,
     },
     profileImage: {
-        width: 40,
-        height: 40,
+        width: 60,
+        height: 60,
         borderRadius: 20,
         backgroundColor: '#e6dcc6',
+        borderWidth: 2,
+        borderColor: '#7A6836',
     },
     widgetArea: {
         marginTop: 16,

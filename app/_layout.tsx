@@ -60,6 +60,9 @@ function AuthenticatedLayout() {
       <Stack.Screen name="dogs" />
     </Stack>
   );
+
+
+  
 }
 
 export default function RootLayout() {

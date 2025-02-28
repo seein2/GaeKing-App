@@ -70,7 +70,7 @@ export const DogSelectionSheet = forwardRef<BottomSheet, DogSelectionSheetProps>
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: 'white',
+        backgroundColor: '#EFEBDC',
         paddingVertical: 12,
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,
@@ -80,11 +80,11 @@ const styles = StyleSheet.create({
         width: 40,
         height: 4,
         borderRadius: 2,
-        backgroundColor: '#DDD',
+        backgroundColor: '#7A6836',
     },
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#EFEBDC',
         padding: 16,
     },
     titleContainer: {
@@ -92,16 +92,18 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginBottom: 8,
+        marginLeft: 18,
     },
     title: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#333',
+        color: '#584C2D',
     },
     subtitle: {
         fontSize: 14,
-        color: '#666',
+        color: '#A18F5D',
         marginBottom: 24,
+        marginLeft: 18,
     },
     scrollContent: {
         flexDirection: 'row',
@@ -110,11 +112,11 @@ const styles = StyleSheet.create({
         paddingBottom: 24,
     },
     dogItem: {
-        width: '48%',
-        backgroundColor: '#f8f9fa',
+        width: '40%',
+        backgroundColor: '#7A683636',
         borderRadius: 12,
         padding: 16,
-        marginBottom: 16,
+        margin: 18,
         alignItems: 'center',
     },
     dogImage: {
@@ -122,6 +124,7 @@ const styles = StyleSheet.create({
         height: 80,
         borderRadius: 40,
         marginBottom: 12,
+        backgroundColor: '#957C3836',
     },
     dogName: {
         fontSize: 16,

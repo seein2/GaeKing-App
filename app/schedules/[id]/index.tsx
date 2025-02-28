@@ -149,7 +149,10 @@ export default function ScheduleDetail() {
                                 {SCHEDULE_TYPE_META[scheduleDetail.schedule_type].icon}{' '}
                                 {SCHEDULE_TYPE_META[scheduleDetail.schedule_type].title}
                             </Text>
-                            <Text style={styles.dogName}>{scheduleDetail.dog_name}</Text>
+                        </View>
+                        {/* 원형 배지 추가 */}
+                        <View style={styles.dogBadge}>
+                            <Text style={styles.dogBadgeText}>{scheduleDetail.dog_name}</Text>
                         </View>
                         <TouchableOpacity
                             style={styles.deleteButton}
@@ -232,18 +235,34 @@ const styles = StyleSheet.create({
     titleContainer: {
         flex: 1,
     },
+    dogBadge: {
+        marginRight: 190,
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 30,
+        borderWidth: 1,
+        borderColor: '#7A6836',
+        backgroundColor: '#F8F3E7',
+    },
+    dogBadgeText: {
+        fontSize: 14,
+        color: '#7A6836',
+        fontWeight: '500',
+    },
     scheduleType: {
         fontSize: 24,
         fontWeight: 'bold',
         marginBottom: 4,
+        color: '#584C2D'
     },
     dogName: {
         fontSize: 18,
-        color: '#666',
+        color: '#7A6836',
+        marginTop: 4,
     },
     deleteButton: {
         padding: 8,
-        backgroundColor: '#ff3b30',
+        backgroundColor: '#B5614B',
         borderRadius: 8,
     },
     deleteButtonText: {
@@ -252,21 +271,22 @@ const styles = StyleSheet.create({
     },
     description: {
         fontSize: 16,
-        color: '#444',
+        color: '#584C2D',
         marginTop: 8,
     },
     sectionTitle: {
         fontSize: 18,
         fontWeight: '600',
         marginBottom: 12,
+        color: '#584C2D',
     },
     repeatInfo: {
         fontSize: 16,
-        color: '#444',
+        color: '#584C2D',
     },
     notificationInfo: {
         fontSize: 16,
-        color: '#444',
+        color: '#584C2D',
     },
     instanceItem: {
         flexDirection: 'row',
@@ -274,7 +294,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 12,
         borderBottomWidth: 1,
-        borderBottomColor: '#f0f0f0',
+        borderBottomColor: '#E0D9C0',
     },
     instanceInfo: {
         flex: 1,
@@ -285,7 +305,7 @@ const styles = StyleSheet.create({
     },
     instanceTime: {
         fontSize: 14,
-        color: '#666',
+        color: '#584C2D',
         marginTop: 4,
     },
     completionStatus: {
@@ -294,10 +314,10 @@ const styles = StyleSheet.create({
         borderRadius: 12,
     },
     completed: {
-        backgroundColor: '#4cd964',
+        backgroundColor: '#8FA693',
     },
     incomplete: {
-        backgroundColor: '#ff9500',
+        backgroundColor: '#A89878',
     },
     statusText: {
         color: '#fff',

@@ -4,12 +4,12 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { AntDesign } from '@expo/vector-icons';
 
 const SCHEDULE_TYPES = [
-    { title: '식사', icon: '🍽️', color: '#FF6B6B', defaultDescription: '사료 급여' },
-    { title: '산책', icon: '🦮', color: '#4ECDC4', defaultDescription: '산책' },
-    { title: '간식', icon: '🦴', color: '#FFD93D', defaultDescription: '간식 급여' },
-    { title: '목욕', icon: '🛁', color: '#6C5CE7', defaultDescription: '목욕' },
-    { title: '병원', icon: '🏥', color: '#A8E6CF', defaultDescription: '병원 방문' },
-    { title: '기타', icon: '📝', color: '#95A5A6' },
+    { title: '식사', icon: '🍽️', color: '#7D9B76', defaultDescription: '사료 급여' },
+    { title: '산책', icon: '🦮', color: '#8FA693', defaultDescription: '산책' },
+    { title: '간식', icon: '🦴', color: '#D18845', defaultDescription: '간식 급여' },
+    { title: '목욕', icon: '🛁', color: '#5D6E7D', defaultDescription: '목욕' },
+    { title: '병원', icon: '🏥', color: '#A75C7A', defaultDescription: '병원 방문' },
+    { title: '기타', icon: '📝', color: '#8E8B84' },
 ] as const;
 
 interface TypeSelectionSheetProps {
@@ -70,7 +70,7 @@ export const TypeSelectionSheet = forwardRef<BottomSheet, TypeSelectionSheetProp
 
 const styles = StyleSheet.create({
     header: {
-        backgroundColor: 'white',
+        backgroundColor: '#EFEBDC',
         paddingVertical: 12,
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,
@@ -80,11 +80,11 @@ const styles = StyleSheet.create({
         width: 40,
         height: 4,
         borderRadius: 2,
-        backgroundColor: '#DDD',
+        backgroundColor: '#7A6836',
     },
     container: {
         flex: 1,
-        backgroundColor: 'white',
+        backgroundColor: '#EFEBDC',
         padding: 16,
     },
     titleContainer: {
@@ -96,14 +96,15 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#333',
+        color: '#584C2D',
         flex: 1,
         textAlign: 'center',
     },
     subtitle: {
         fontSize: 14,
-        color: '#666',
+        color: '#A18F5D',
         marginBottom: 24,
+        textAlign: 'center',
     },
     scrollContent: {
         flexDirection: 'row',
@@ -111,11 +112,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     typeItem: {
-        width: '48%',
-        backgroundColor: '#f8f9fa',
+        width: '40%',
+        backgroundColor: '#7A683636',
         borderRadius: 12,
         padding: 16,
-        marginBottom: 16,
+        margin: 18,
         alignItems: 'center',
     },
     iconContainer: {
@@ -132,6 +133,6 @@ const styles = StyleSheet.create({
     typeTitle: {
         fontSize: 16,
         fontWeight: '600',
-        color: '#333',
+        color: '#584C2D',
     },
 });

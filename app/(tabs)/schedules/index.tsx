@@ -7,32 +7,32 @@ import { router } from 'expo-router';
 
 const SCHEDULE_TYPE_META = {
   '식사': {
-    color: '#FF9F1C',  // 주황색
+    color: '#7D9B76',  // 주황색
     title: '식사',
     icon: '🍽️'
   },
   '산책': {
-    color: '#2EC4B6',  // 청록색
+    color: '#8FA693',  // 청록색
     title: '산책',
     icon: '🦮'
   },
   '간식': {
-    color: '#E71D36',  // 빨간색
+    color: '#D18845',  // 빨간색
     title: '간식',
     icon: '🦴'
   },
   '목욕': {
-    color: '#011627',  // 남색
+    color: '#5D6E7D',  // 남색
     title: '목욕',
     icon: '🛁'
   },
   '병원': {
-    color: '#FF3366',  // 분홍색
+    color: '#A75C7A',  // 분홍색
     title: '병원',
     icon: '🏥'
   },
   '기타': {
-    color: '#666666',  // 회색
+    color: '#8E8B84',  // 회색
     title: '기타',
     icon: '📝'
   }
@@ -49,7 +49,7 @@ export default function ScheduleScreen() {
   const [markedDates, setMarkedDates] = useState<MarkedDates>({
     [todayString]: {
       selected: true,
-      selectedColor: '#00adf5',
+      selectedColor: '#7A6836',
       dots: []
     }
   });
@@ -104,7 +104,7 @@ export default function ScheduleScreen() {
     updatedMarkedDates[day.dateString] = {
       ...updatedMarkedDates[day.dateString],
       selected: true,
-      selectedColor: '#00adf5',
+      selectedColor: '#7A6836',
       dots: updatedMarkedDates[day.dateString]?.dots || [],
     };
 
@@ -195,18 +195,22 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
-    marginTop: -20,
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+    marginTop: -50,
     paddingTop: 20,
+    marginLeft: 20,
+    marginRight: 20,
   },
   dateHeader: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '600',
-    color: '#1a1a1a',
+    color: '#7A6836',
     paddingHorizontal: 20,
     paddingVertical: 15,
+    marginTop: -60,           // 위로 올리기
+    marginBottom: 10,         // 아래 여백 추가
   },
   loader: {
     flex: 1,

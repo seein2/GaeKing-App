@@ -22,12 +22,14 @@ export default function AuthInput({ value, onChangeText, placeholder, secureText
 
 const styles = StyleSheet.create({
     input: {
-        width: '80%',
+        width: 229,
         height: 40,
         borderWidth: 1,
         borderColor: '#ddd',
         borderRadius: 8,
         padding: 10,
         marginVertical: 8,
+        fontSize: 18,
+        textAlign: 'center',
     },
 });

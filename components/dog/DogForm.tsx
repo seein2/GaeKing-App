@@ -95,6 +95,7 @@ export default function DogForm({
                     value={dogName}
                     onChangeText={setDogName}
                     style={styles.input}
+                    placeholder="강아지 이름"
                     accessibilityLabel="강아지 이름 입력"
                     accessibilityHint="강아지의 이름을 입력하세요"
                 />
@@ -126,12 +127,12 @@ export default function DogForm({
                         <Button
                             title="남자"
                             onPress={() => setGender('남자')}
-                            color={gender === '남자' ? '#007AFF' : '#999'}
+                            color={gender === '남자' ? '#7A6836' : '#999'}
                         />
                         <Button
                             title="여자"
                             onPress={() => setGender('여자')}
-                            color={gender === '여자' ? '#007AFF' : '#999'}
+                            color={gender === '여자' ? '#7A6836' : '#999'}
                         />
                     </View>
                 </View>
@@ -147,8 +148,8 @@ export default function DogForm({
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        padding: 16,
-        backgroundColor: '#fff',
+        padding: 60,
+        backgroundColor: '#E3DFD5',
     },
     profileSection: {
         alignItems: 'center',
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     },
     input: {
         borderWidth: 1,
-        borderColor: '#ddd',
+        borderColor: '#7A6836',
         borderRadius: 8,
         padding: 12,
         marginBottom: 16,
@@ -172,7 +173,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 16,
         marginBottom: 8,
-        color: '#333',
+        color: '#7A6836',
     },
     genderButtons: {
         flexDirection: 'row',
@@ -183,13 +184,18 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     imageSelected: {
-        marginTop: 8,
+        marginTop: 50,
         color: '#007AFF',
         textAlign: 'center',
     },
     submitButton: {
-        marginTop: 'auto',
-        marginBottom: 20,
+        marginTop: 20,
+        marginBottom: -20,
+        padding: 7,
+        backgroundColor: '#7A6836',
+        borderRadius: 12,
+        width: '70%',
+        alignSelf: 'center',
     },
     required: {
         color: 'red',
